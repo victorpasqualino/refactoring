@@ -1,12 +1,15 @@
 package com.celfocus.training.entity;
 
-public class ItemInfo {
+public class Item {
 
     private String name;
 
     private double value;
 
-    public ItemInfo(String name, double value) {
+    public Item() {
+    }
+
+    public Item(String name, double value) {
         this.name = name;
         this.value = value;
     }

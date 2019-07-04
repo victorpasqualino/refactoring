@@ -17,15 +17,16 @@ import org.apache.commons.codec.binary.Hex;
 
 public final class Utils {
 
-    private Utils() {};
+    private Utils() {
+    }
 
-    static MessageDigest SHA256;
+    private static final MessageDigest SHA256;
     
     static {
         try {
             SHA256 = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao obter instância de SHA-256", e);
         }
     }
     
@@ -33,7 +34,7 @@ public final class Utils {
         return Hex.encodeHexString(toSHA256(source.getBytes(charset)));
     }
     
-    public static byte[] toSHA256(byte[] bytes) {
+    private static byte[] toSHA256(byte[] bytes) {
         return SHA256.digest(bytes);
     }
 
@@ -65,7 +66,7 @@ public final class Utils {
         try {
             return format.parse(date);
         } catch (ParseException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Erro ao converter data: " + date, ex);
         }
     }
 
@@ -105,7 +106,7 @@ public final class Utils {
             throw new IllegalArgumentException("Length should be pair");
         }
         int length = ts.length / 2;
-        Map<K, V> map = new HashMap<K, V>(length);
+        Map<K, V> map = new HashMap<>(length);
         for (int index = 0; index <= length; index+=2) {
             map.put((K) ts[index], (V) ts[index + 1]);
         }

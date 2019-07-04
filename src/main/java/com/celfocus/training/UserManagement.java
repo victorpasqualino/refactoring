@@ -8,10 +8,10 @@ import com.celfocus.training.entity.ShoppingCart;
 import com.celfocus.training.entity.User;
 import com.celfocus.training.util.Utils;
 
-public class UserRequest implements ReturnFrontend {
+public class UserManagement implements ReturnFrontend {
 
-    public static final UserRepository userRepository = new UserRepository();
-    public static final int MAX_AGE = 65;
+    private static final UserRepository userRepository = new UserRepository();
+    private static final int MAX_AGE = 65;
 
     /**
      * Criar ou atualizar usuario
@@ -19,7 +19,7 @@ public class UserRequest implements ReturnFrontend {
      * @param name, user name
      * @param birth, user birth date
      */
-    public void createOrUpdateUser(String name, String birth) {
+    public void createUser(String name, String birth) {
 
         Date birthDate = Utils.toDate(birth, new SimpleDateFormat("dd/mm/yyyy"));
 
@@ -28,7 +28,7 @@ public class UserRequest implements ReturnFrontend {
         user.setBirthDate(birthDate);
         user.setOlder(isOlderUser(birthDate));
 
-        userRepository.createOrUpdateUser(user); //todo  mudar nome para createUser apenas
+        userRepository.createOrUpdateUser(user);
     }
 
     private boolean isOlderUser(Date birthDate) {
@@ -54,7 +54,7 @@ public class UserRequest implements ReturnFrontend {
      * @param itemName, item name
      * @param quantity, quantity
      */
-    public void addItemToShoppingCart(String userName, String itemName, int quantity) {
+    public void addItemToCart(String userName, String itemName, int quantity) {
 
         itemName = itemName.toLowerCase().concat("_item");
 
