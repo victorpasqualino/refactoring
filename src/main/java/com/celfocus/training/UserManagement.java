@@ -67,7 +67,7 @@ public class UserManagement implements ReturnFrontend {
      * @param user usuario que será renderizado
      * @return o texto no formato solicitado com as informarções do user
      */
-
+    @Override
     public String returnFrontendUser(String type, User user) {
         if (type.equals("html")) {
             return "<div>"
@@ -92,6 +92,7 @@ public class UserManagement implements ReturnFrontend {
      * @param shoppingCart shoppingCart que será renderizado
      * @return o texto no formato solicitado com as informarções do shoppingCart
      */
+    @Override
     public String returnFrontendShoppingCart(String type, ShoppingCart shoppingCart) {
         if (type.equals("html")) {
             return "<div>"
@@ -114,6 +115,7 @@ public class UserManagement implements ReturnFrontend {
      * @param item item que será renderizado
      * @return o texto no formato solicitado com as informarções do item
      */
+    @Override
     public String returnFrontendItem(String type, Item item) {
         if (type.equals("html")) {
             return "<div>"
