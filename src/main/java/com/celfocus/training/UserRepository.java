@@ -1,106 +1,75 @@
 package com.celfocus.training;
 
+import com.celfocus.training.entity.ItemInfo;
+import com.celfocus.training.entity.ShoppingCart;
+import com.celfocus.training.entity.User;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Temos 4 entidades em nosso projeto User, ShoppingCart, ShoppingCartItem e ItemInfo
- */
-public class Saver {
+public class Repository {
 
-    private static final List<User> users = new ArrayList<>();
-    private static final List<ShoppingCart> shoppingCarts = new ArrayList<>();
-    private static final List<ItemInfo> itens = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
+    private final List<ShoppingCart> shoppingCarts = new ArrayList<>();
+    private final List<ItemInfo> itens = new ArrayList<>();
 
-    public static class User {
-        
-        public String nameOfUser; // nome
-
-        public Date bd; // data de nascimento
-
-        public boolean ifuserisolder; // se usuário é maior de idade
+    public void createUser() {
 
     }
 
-    public static class ShoppingCart {
-        
-        public User user;
-
-        public List<ShoppingCartItem> itens;
-    }
-
-    public static class ShoppingCartItem {
-
-        public ItemInfo item;
-
-        public int qt;
-
-        public double discount;
+    public void updateUser() {
 
     }
 
-    public static class ItemInfo {
-
-        public String name;
-
-        public double valor;
+    //todo - fundir os 2 métodos seguintes
+    public boolean existUser(User userToSearch) {
+        for (User user : users) {
+            if (user.getName().equals(userToSearch.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public User saveOrUpdateUser(String name, Date bd, boolean ifuserisolder) {
-        if (eu(name)) {
-            User user = fu(name);
-            user.bd = bd;
-            user.ifuserisolder = ifuserisolder;
-            ShoppingCart found = null;
+    private User getUserFromList(User userToSearch) {
+        for (User user : users) {
+            if (user.getName().equals(userToSearch.getName())) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    //todo - este método vai deixar de existir; criar métodos mais pequenos em que só têm um objetivo
+    //public User createOrUpdateUser(String name, Date bd, boolean ifuserisolder) {
+    public User createOrUpdateUser(User user) {
+        if (existUser(user)) {
+            User foundUser = getUserFromList(user);
+            foundUser.setBirthDate(user.getBirthDate());
+            foundUser.setOlder(user.isOlder());
+
+            ShoppingCart foundCart = null;
             for (ShoppingCart var : shoppingCarts) {
-                if (var.user == user) {
-                    found = var;
+                if (var.getUser().equals(user)) {
+                    foundCart = var;
                 }
             }
 
-            if (found != null) {
-                //do nothing
-            } else {
-                ShoppingCart s = new ShoppingCart();
-                s.user = user;
-                shoppingCarts.add(s);
+            if (foundCart == null) {
+                ShoppingCart shoppingCart = new ShoppingCart();
+                shoppingCart.setUser(user);
+                shoppingCarts.add(shoppingCart);
             }
+
             users.add(user);
             return user;
-        } else {
-            User user = new User();
-            user.bd = bd;
-            user.nameOfUser = name;
-            user.ifuserisolder = ifuserisolder;
-            users.add(user);
-            ShoppingCart s = new ShoppingCart();
-            s.user = user;
-            s.itens = new ArrayList<>();
-            shoppingCarts.add(s);
-            return user;
         }
+
+        return null;
     }
 
-    private boolean eu(String name) {
-        User userFound = null;
-        for (User user : users) {
-            if (user.nameOfUser.equals(name)) {
-                userFound = user;
-            }
-        }
-        return userFound != null;
-    }
 
-    private User fu(String name) {
-        User userFound = null;
-        for (User user : users) {
-            if (user.nameOfUser.equals(name)) {
-                userFound = user;
-            }
-        }
-        return userFound;
-    }
 
     public ItemInfo encontrarItem(String name) {
         ItemInfo itemFound = null;
