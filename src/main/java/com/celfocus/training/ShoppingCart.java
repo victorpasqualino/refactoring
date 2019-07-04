@@ -19,11 +19,9 @@ public class ShoppingCart {
 	}
 
 
-
 	public User getUser() {
 		return user;
 	}
-
 
 
 	public void setUser(User user) {
@@ -31,36 +29,33 @@ public class ShoppingCart {
 	}
 
 
-
 	public static List<ShoppingCartItem> getShoppingCartlistItem() {
 		return shoppingCartlistItem;
 	}
-
 
 
 	public static void setShoppingCartlistItem(List<ShoppingCartItem> shoppingCartlistItem) {
 		ShoppingCart.shoppingCartlistItem = shoppingCartlistItem;
 	}
 
-
-
 	/**
-	 * Adicionar item ao carrinho
+	 * Adicionar item ao carrinho de compras
 	 */    
-	public void addItemShoppingCart(String userName, String itemName, int quantityToAdd) {
-		
+	public void addItemShoppingCart(String userName, String itemName, Integer quantityToAdd) {
+
 		itemName = itemName.toLowerCase().concat("_item");
+
 		if ((this.user = Saver.findUser(userName)) != null ) {
 			for (ShoppingCartItem item : shoppingCartlistItem) {
 				if(itemName == item.getItem().getName()) {
-					if(quantityToAdd >0 ) {
+					if(quantityToAdd >0 ) 
 						item.setQuantityItem(quantityToAdd+item.getQuantityItem());
-					}else {
+					else 
 						JOptionPane.showMessageDialog(null, "Insira uma Quantidade valida");
-					}
-				}else {
+
+				}else 
 					shoppingCartlistItem.add(item);
-				}
+
 			}
 		}
 		else {
@@ -69,6 +64,9 @@ public class ShoppingCart {
 		}
 	}
 
+	/**
+	 * Remover item do carrinho de compras
+	 */    
 
 	public void removeItemShoppingCart(String userName, String itemName) {
 		itemName = itemName.toLowerCase().concat("_item");
@@ -78,33 +76,42 @@ public class ShoppingCart {
 				JOptionPane.showMessageDialog(null, "Item removido");
 			}
 		}
-		else {
+		else 
+		{
 			JOptionPane.showMessageDialog(null, "User não Existe");
 
 		}
 	}
 
-	private double valueItem(String itemName) {
+	/**
+	 * Valida se o Item tem valor.
+	 */    
+
+	private Double valueItem(String itemName) {
 		for (ShoppingCartItem item : shoppingCartlistItem) {
 			if(itemName == item.getItem().getName()) {
-				return item.getItem().getValor();
-			}else
+				if(item.getItem().getValor() != null)
+					return item.getItem().getValor();
+			}
+			else
 			{
 				JOptionPane.showMessageDialog(null, "Item without value.");
-				return 0;				
+				return null ;				
 			}
 		}
-		return 0;
+		return null;
 
 	}
 
-	private ShoppingCartItem existItem(String itemName, double itemValue) {
+	/**
+	 * Valida se o Item existe.
+	 */
+
+	private ShoppingCartItem existItem(String itemName, Double itemValue) {
 		for (ShoppingCartItem item : shoppingCartlistItem) {
-			if(itemName == item.getItem().getName()) {
-				if(itemValue == this.valueItem(itemName)) {
-					return item;
-				}
-			}      
+			if(itemName == item.getItem().getName()) 
+				if(itemValue == this.valueItem(itemName)) 
+					return item;     
 		}
 		JOptionPane.showMessageDialog(null, "Item does not exist");
 		return null;

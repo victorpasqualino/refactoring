@@ -2,8 +2,10 @@
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.swing.JOptionPane;
 
@@ -18,7 +20,7 @@ public class Saver {
 
 	public static List<User> userList = new ArrayList<>();
 	private User user = new User(null, null, false);
-	
+
 	public ShoppingCart shoppingCart = new ShoppingCart(this.user, null);
 
 
@@ -49,19 +51,21 @@ public class Saver {
 		return userList;
 	}
 
-	
-    public User saveOrUpdateUser(String userName, Date birthDate, boolean userOlder) {
-        if (findUser(userName)!=null) {
-        	this.user.setNameOfUser(userName);
-        	this.user.setBirthDate(birthDate);
-        	this.user.setIfUserOlder(userIsOlder(userName, birthDate));  
-        
-        } else {
-        	userList.add(this.user);
-        }
+	/**
+	 * Cria ou atualiza o usuário
+	 */
+	public User createOrUpdateUser(String userName, Date birthDate, boolean userOlder) {
+		if (findUser(userName)!=null) {
+			this.user.setNameOfUser(userName);
+			this.user.setBirthDate(birthDate);
+			this.user.setIfUserOlder(userIsOlder(userName, birthDate));  
+
+		} else {
+			userList.add(this.user);
+		}
 		return user;
-    }
-    
+	}
+
 	/**
 	 * Validar se o Usuario existe
 	 */
@@ -75,17 +79,20 @@ public class Saver {
 		JOptionPane.showMessageDialog(null, "User Does not exist");
 		return null;
 	}
-	/**
-	 * Validar se o Usuario tem mais de 65 anos.
-	 */
 
-	@SuppressWarnings("deprecation")
+	/**
+	 * Valida se o Usuario tem mais de 65 anos.
+	 */
 	private boolean userIsOlder(String userName, Date birthDateUser) {
 
 		userName = userName.toUpperCase();
-		//Date birthDate = Utils.toDate(birthDateUser, new SimpleDateFormat("dd/mm/yyyy"));
-		
-		if (new Date().getYear() - birthDateUser.getYear() < 65) {
+		Calendar yearBirth = Calendar.getInstance(TimeZone.getTimeZone("Europe/Lisbon"));
+		Calendar presentYear = Calendar.getInstance(TimeZone.getTimeZone("Europe/Lisbon"));
+
+		yearBirth.setTime(birthDateUser);
+		int year = yearBirth.get(Calendar.YEAR);
+
+		if ((presentYear.get(Calendar.YEAR) - year) < 65) {
 			return false;
 		}
 		return true;
@@ -100,7 +107,5 @@ public class Saver {
 			JOptionPane.showMessageDialog(null, "User deleted");
 		}
 	}
-
-
 
 } 

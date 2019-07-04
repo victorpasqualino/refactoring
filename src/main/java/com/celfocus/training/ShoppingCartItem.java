@@ -6,12 +6,12 @@ public class ShoppingCartItem {
 
 	public ItemInfo item;
 
-    public int quantityItem;
+	public int quantityItem;
 
-    public double discount;  
-    
-    
-    public ShoppingCartItem(ItemInfo item, int quantityItem, double discount) {
+	public double discount;  
+
+
+	public ShoppingCartItem(ItemInfo item, Integer quantityItem, Double discount) {
 		super();
 		this.item = item;
 		this.quantityItem = quantityItem;
@@ -26,7 +26,7 @@ public class ShoppingCartItem {
 		this.item = item;
 	}
 
-	public int getQuantityItem() {
+	public Integer getQuantityItem() {
 		return quantityItem;
 	}
 
@@ -34,7 +34,7 @@ public class ShoppingCartItem {
 		this.quantityItem = (int) quantityToAdd;
 	}
 
-	public double getDiscount() {
+	public Double getDiscount() {
 		return discount;
 	}
 

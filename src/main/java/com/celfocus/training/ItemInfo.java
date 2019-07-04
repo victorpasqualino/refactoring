@@ -3,14 +3,14 @@ package com.celfocus.training;
 public class ItemInfo extends ShoppingCartItem {
 
 
-	public ItemInfo(ItemInfo item, int quantityItem, double discount) {
+	public ItemInfo(ItemInfo item, Integer quantityItem, Double discount) {
 		super(item, quantityItem, discount);
 		// TODO Auto-generated constructor stub
 	}
 
 	public String name;
 
-	public double valor;
+	public Double valor;
 
 
 	public String getName() {
@@ -21,7 +21,7 @@ public class ItemInfo extends ShoppingCartItem {
 		this.name = name;
 	}
 
-	public double getValor() {
+	public Double getValor() {
 		return valor;
 	}
 
