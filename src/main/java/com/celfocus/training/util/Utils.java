@@ -18,9 +18,7 @@ import org.apache.commons.codec.binary.Hex;
 public final class Utils {
 
     private Utils() {};
-
     static MessageDigest SHA256;
-    
     static {
         try {
             SHA256 = MessageDigest.getInstance("SHA-256");
@@ -42,19 +40,16 @@ public final class Utils {
     }
     
     public static Map<String, String> parseHTTPHeaderMap(String headers) {
+
         String value = headers.substring(1, headers.length() - 1);
-        String[] keyValuePairs = value.split(",");              //split the string to creat key-value pairs
+        String[] keyValuePairs = value.split(",");                      //split the string to creat key-value pairs
         Map<String, String> map = new HashMap<>();
 
-        for (String pair : keyValuePairs)                        //iterate over the pairs
-        {
+        for (String pair : keyValuePairs) {                                             //iterate over the pairs
             String[] entry = pair.split("=", 2);                   //split the pairs to get key and value
-
             if (entry.length > 1) {
-
-                map.put(entry[0].trim(), entry[1].trim());          //add them to the hashmap and trim whitespaces
+                map.put(entry[0].trim(), entry[1].trim());                          //add them to the hashmap and trim whitespaces
             }
-
         }
         return map;
     }
@@ -69,7 +64,7 @@ public final class Utils {
         }
     }
 
-    public static String toString(Date date, String format) {
+    public static String dateToString(Date date, String format) {
         return toString(date, new SimpleDateFormat(format));
     }
 
@@ -84,33 +79,36 @@ public final class Utils {
     }
 
     @SafeVarargs
-    public static <T> java.util.List<T> createListFromArray(T... ts) {
-        if (ts == null) {
+    public static <T> java.util.List<T> createListFromArray(T... arrayList) {
+
+        if (arrayList == null) {
             return new ArrayList<>(0);
         }
-        java.util.List<T> list = new ArrayList<>(ts.length);
-        for (T t : ts) {
-            list.add(t);
+
+        java.util.List<T> list = new ArrayList<>(arrayList.length);
+        for (T item : arrayList) {
+            list.add(item);
         }
         return list;
     }
 
     @SafeVarargs
     @SuppressWarnings("unchecked")
-    public static <K, V> Map<K, V> createMapFromArray(Object... ts) {
-        if (ts == null) {
+    public static <K, V> Map<K, V> createMapFromArray(Object... hashMap) {
+
+        if (hashMap == null) {
             return new HashMap<>(0);
         }
-        if (ts.length % 2 != 0) {
+
+        if (hashMap.length % 2 != 0) {
             throw new IllegalArgumentException("Length should be pair");
         }
-        int length = ts.length / 2;
+
+        int length = hashMap.length / 2;
         Map<K, V> map = new HashMap<K, V>(length);
         for (int index = 0; index <= length; index+=2) {
-            map.put((K) ts[index], (V) ts[index + 1]);
+            map.put((K) hashMap[index], (V) hashMap[index + 1]);
         }
         return map;
     }
-
-
 }
