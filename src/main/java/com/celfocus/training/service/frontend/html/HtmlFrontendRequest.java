@@ -12,26 +12,27 @@ import com.celfocus.training.util.Utils;
 
 public class HtmlFrontendRequest implements UserFrontendRequest, ShoppingCartFrontendRequest, ItemInfoFrontendRequest {
 
+	private static final String USER_TEMPLATE = "<div><h1>User</h1><span>%s</span><span>%s</span><span>%s</span></div>";
+	private static final String SHOPPINGCART_TEMPLATE = "<div><h1>ShoppingCart</h1><span>%s</span><span>%s</span><span>%s</span></div>";
+	private static final String ITEM_INFO_TEMPLATE = "<div><h1>ItemInfo</h1><span>%s</span><span>%s</span><span>%s</span></div>";
+
 	@Override
-	public String getFrontendUser(User user) throws Exception {
+	public String getFrontendUser(User user) {
 		Objects.requireNonNull(user);
-		return "<div>" + "<h1>User</h1>" + "<span>" + user.getName() + "</span>" + "<span>"
-				+ Utils.toString(user.getBirthDate(), DATE_FORMAT) + "</span>" + "<span>" + user.isSenior() + "</span>"
-				+ "</div>";
+		return String.format(USER_TEMPLATE, user.getName(), Utils.toString(user.getBirthDate(), DATE_FORMAT),
+				user.isSenior());
 	}
 
 	@Override
-	public String getFrontendShoppingCart(ShoppingCart shoppingCart) throws Exception {
+	public String getFrontendShoppingCart(ShoppingCart shoppingCart) {
 		Objects.requireNonNull(shoppingCart);
-		return "<div>" + "<h1>ShoppingCart</h1>" + "<span> " + shoppingCart.getUser() + "</span>" + "<span> "
-				+ shoppingCart.getItems() + "</span>" + "</div>";
+		return String.format(SHOPPINGCART_TEMPLATE, getFrontendUser(shoppingCart.getUser()), shoppingCart.getItems());
 	}
 
 	@Override
-	public String getFrontendItemInfo(ItemInfo itemInfo) throws Exception {
+	public String getFrontendItemInfo(ItemInfo itemInfo) {
 		Objects.requireNonNull(itemInfo);
-		return "<div>" + "<h1>Item</h1>" + "<span> " + itemInfo.getName() + "</span>" + "<span> " + itemInfo.getValue()
-				+ "</span>" + "</div>";
+		return String.format(ITEM_INFO_TEMPLATE, itemInfo.getName(), itemInfo.getValue());
 	}
 
 }

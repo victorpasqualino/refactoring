@@ -15,21 +15,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import org.apache.commons.codec.binary.Hex;
 
+import com.celfocus.training.util.exception.RefactorigException;
+
 public final class Utils {
+
+	private final static Logger LOGGER = Logger.getLogger(Utils.class.getName());
 
 	private Utils() {
 	}
 
-	static MessageDigest SHA256;
+	static MessageDigest sha256;
 
 	static {
 		try {
-			SHA256 = MessageDigest.getInstance("SHA-256");
+			sha256 = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
+			LOGGER.severe("Error creating SHA-256");
 		}
 	}
 
@@ -38,7 +43,7 @@ public final class Utils {
 	}
 
 	public static byte[] toSHA256(byte[] bytes) {
-		return SHA256.digest(bytes);
+		return sha256.digest(bytes);
 	}
 
 	public static boolean isNullOrEmpty(String str) {
@@ -63,13 +68,13 @@ public final class Utils {
 		return map;
 	}
 
-	public static Date toDate(String date, DateFormat format) {
+	public static Date toDate(String date, DateFormat format) throws RefactorigException {
 		Objects.requireNonNull(date);
 		Objects.requireNonNull(format);
 		try {
 			return format.parse(date);
 		} catch (ParseException ex) {
-			throw new RuntimeException("Error parsing Date" + date + " in the format" + format, ex);
+			throw new RefactorigException(ex);
 		}
 	}
 
