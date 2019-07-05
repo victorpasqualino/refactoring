@@ -20,36 +20,37 @@ public class Saver {
 
 
     public User saveOrUpdateUser(String name, Date birthDay, boolean overEighteen) {
-        if (existUser(name)) {
-            //updtateUser(name);
-            User user = findUser(name);
-            user = fillUserInfo(user,birthDay,overEighteen);
-            ShoppingCart foundCart = userHasShoppingCart(user);
-            if (foundCart != null) {
-                users.add(user);
-                return user;
-            }else{
-                ShoppingCart s = createShoppingCart(user);
-                shoppingCarts.add(s);
-                users.add(user);
-                return user;
-            }
-        } else {
-            //saveUser(name);
-            User user = new User();
-            user.setNameOfUser(name);
-            users.add(fillUserInfo(user,birthDay,overEighteen));
+        return existUser(name) ? updateUser(name, birthDay, overEighteen) : saveUser(name, birthDay, overEighteen);
+    }
+
+    private User updateUser(String name, Date birthDay, boolean overEighteen) {
+        User user = findUser(name);
+        user = fillUserInfo(user,birthDay,overEighteen);
+        ShoppingCart foundCart = userHasShoppingCart(user);
+        if (foundCart != null) {
+            users.add(user);
+        }else{
             ShoppingCart s = createShoppingCart(user);
-            s.setItens(new ArrayList<>());
             shoppingCarts.add(s);
-            return user;
+            users.add(user);
         }
+        return user;
+    }
+
+    private User saveUser(String name, Date birthDay, boolean overEighteen) {
+        User user = new User();
+        user.setNameOfUser(name);
+        users.add(fillUserInfo(user,birthDay,overEighteen));
+        ShoppingCart s = createShoppingCart(user);
+        s.setItens(new ArrayList<>());
+        shoppingCarts.add(s);
+        return user;
     }
 
     private ShoppingCart userHasShoppingCart(User user){
         ShoppingCart foundCart = null;
         for (ShoppingCart cart : shoppingCarts) {
-            if (cart.getUser() == user) {
+            if (cart.getUser().equals(user)) {
                 foundCart = cart;
             }
         }
@@ -105,62 +106,65 @@ public class Saver {
                 userFound = user;
             }
         }
-        if (userFound == null) {
-        } else {
+        if (userFound != null) {
             users.remove(userFound);
         }
     }
 
-    public void aIU(String user, String nameItem, int qt) {
-        User userFound = null;
-        for (User user1 : users) {
-            if (user1.getNameOfUser().equals(user)) {
-                userFound = user1;
-            }
-        }
-
+    private ShoppingCart findShoppingCart(User userFound) {
+        ShoppingCart found = null;
         if (userFound != null) {
-            ShoppingCart found = null;
             for (ShoppingCart var : shoppingCarts) {
-                if (var.getUser() == userFound) {
+                if (var.getUser().equals(userFound)) {
                     found = var;
                 }
             }
+        }
+        return found;
+    }
 
-            if (found != null) {
-                ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : found.getItens()) {
-                    if (s.getItem().getName() == nameItem) {
-                        scif = s;
-                    }
-                }
-
-                if (scif != null) {
-
-                    scif.setQt(scif.getQt()+qt);
-                } else {
-                    ItemInfo ifo = null;
-                    for (ItemInfo item : itens) {
-                        if (item.getName().equals(nameItem)) {
-                            ifo = item;
-                        }
-                    }
-
-                    if (ifo != null) {
-                        ShoppingCartItem s1 = new ShoppingCartItem();
-                        s1.setItem(ifo);
-                        s1.setQt(qt);
-                        if ( userFound.isOverEighteen() && (new Date().getYear() - userFound.getBirthDay().getYear() < 80) ) {
-                            s1.setDiscount(0.2 );
-                        } else if (userFound.isOverEighteen()) {
-                            s1.setDiscount(0.1);
-                        }
-                    } else {
-
-                    }
-                    
+    private ShoppingCartItem findShoppingCartItem(ShoppingCart found, String nameItem) {
+        ShoppingCartItem scif = null;
+        if (found != null) {
+            for (ShoppingCartItem s : found.getItens()) {
+                if (s.getItem().getName().equals(nameItem)) {
+                    scif = s;
                 }
             }
+        }
+        return scif;
+    }
+
+    public void aIU(String user, String nameItem, int qt) {
+        User userFound = findUser(user);
+        ShoppingCart found = findShoppingCart(userFound);
+        ShoppingCartItem scif = findShoppingCartItem(found, nameItem);
+
+        if (scif != null) {
+
+            scif.setQt(scif.getQt() + qt);
+        } else {
+            ItemInfo ifo = null;
+            for (ItemInfo item : itens) {
+                if (item.getName().equals(nameItem)) {
+                    ifo = item;
+                }
+            }
+
+            if (ifo != null) {
+                ShoppingCartItem s1 = new ShoppingCartItem();
+                s1.setItem(ifo);
+                s1.setQt(qt);
+                if (userFound != null){
+                    if (userFound.isOverEighteen() && (new Date().getYear() - userFound.getBirthDay().getYear() < 80)) {
+                        s1.setDiscount(0.2);
+                    } else if (userFound.isOverEighteen()) {
+                        s1.setDiscount(0.1);
+                    }
+                }
+
+            }
+
         }
     }
 
