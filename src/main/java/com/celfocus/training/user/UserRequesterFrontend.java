@@ -25,15 +25,15 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>User</h1>"
              + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.bd + "</span>"
-             + "<span>" + user.ifuserisolder + "</span>"
+             + "<span>" + user.birthDay + "</span>"
+             + "<span>" + user.overEighteen + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<name> " + user.nameOfUser + "</name>"
-                    + "<bd>" + user.bd + "</bd>"
-                    + "<older> " + user.ifuserisolder + "</older>";
+                    + "<bd>" + user.birthDay + "</bd>"
+                    + "<older> " + user.overEighteen + "</older>";
             } else {
                 //do nothing
                 return "";
