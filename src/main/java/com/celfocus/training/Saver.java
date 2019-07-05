@@ -17,9 +17,9 @@ public class Saver {
         
         public String nameOfUser; // nome
 
-        public Date bd; // data de nascimento
+        public Date birthDay; // data de nascimento
 
-        public boolean ifuserisolder; // se usuário é maior de idade
+        public boolean overEighteen; // se usuário é maior de idade
 
     }
 
@@ -47,42 +47,56 @@ public class Saver {
         public double valor;
     }
 
-    public User saveOrUpdateUser(String name, Date bd, boolean ifuserisolder) {
-        if (eu(name)) {
-            User user = fu(name);
-            user.bd = bd;
-            user.ifuserisolder = ifuserisolder;
-            ShoppingCart found = null;
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.user == user) {
-                    found = var;
-                }
-            }
-
-            if (found != null) {
-                //do nothing
-            } else {
-                ShoppingCart s = new ShoppingCart();
-                s.user = user;
+    public User saveOrUpdateUser(String name, Date birthDay, boolean overEighteen) {
+        if (existUser(name)) {
+            //updtateUser(name);
+            User user = findUser(name);
+            user = fillUserInfo(user,birthDay,overEighteen);
+            ShoppingCart foundCart = userHasShoppingCart(user);
+            if (foundCart != null) {
+                users.add(user);
+                return user;
+            }else{
+                ShoppingCart s = createShoppingCart(user);
                 shoppingCarts.add(s);
+                users.add(user);
+                return user;
             }
-            users.add(user);
-            return user;
         } else {
+            //saveUser(name);
             User user = new User();
-            user.bd = bd;
             user.nameOfUser = name;
-            user.ifuserisolder = ifuserisolder;
-            users.add(user);
-            ShoppingCart s = new ShoppingCart();
-            s.user = user;
+            users.add(fillUserInfo(user,birthDay,overEighteen));
+            ShoppingCart s = createShoppingCart(user);
             s.itens = new ArrayList<>();
             shoppingCarts.add(s);
             return user;
         }
     }
 
-    private boolean eu(String name) {
+    private ShoppingCart userHasShoppingCart(User user){
+        ShoppingCart foundCart = null;
+        for (ShoppingCart cart : shoppingCarts) {
+            if (cart.user == user) {
+                foundCart = cart;
+            }
+        }
+        return foundCart;
+    }
+
+    private User fillUserInfo(User user, Date birthDate,boolean overEighteen){
+        user.birthDay = birthDate;
+        user.overEighteen = overEighteen;
+        return user;
+    }
+
+    private ShoppingCart createShoppingCart(User user){
+        ShoppingCart sc = new ShoppingCart();
+        sc.user = user;
+        return sc;
+    }
+
+    private boolean existUser(String name) {
         User userFound = null;
         for (User user : users) {
             if (user.nameOfUser.equals(name)) {
@@ -92,7 +106,7 @@ public class Saver {
         return userFound != null;
     }
 
-    private User fu(String name) {
+    private User findUser(String name) {
         User userFound = null;
         for (User user : users) {
             if (user.nameOfUser.equals(name)) {
@@ -163,11 +177,9 @@ public class Saver {
                         ShoppingCartItem s1 = new ShoppingCartItem();
                         s1.item = ifo;
                         s1.qt = qt;
-                        if ( userFound.ifuserisolder
-                 == true && (new Date().getYear() - userFound.bd.getYear() < 80) ) {
+                        if ( userFound.overEighteen && (new Date().getYear() - userFound.birthDay.getYear() < 80) ) {
                             s1.discount = 0.2; 
-                        } else if (userFound.ifuserisolder
-                 == true) {
+                        } else if (userFound.overEighteen) {
                             s1.discount = 0.1;
                         }
                     } else {
