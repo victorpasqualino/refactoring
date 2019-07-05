@@ -6,7 +6,7 @@ import java.util.Date;
 import com.celfocus.training.Saver;
 import com.celfocus.training.Saver.ItemInfo;
 import com.celfocus.training.Saver.ShoppingCart;
-import com.celfocus.training.Saver.User;
+import com.celfocus.training.util.User;
 import com.celfocus.training.util.Utils;
 
 /**
@@ -25,15 +25,15 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>User</h1>"
              + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.bd + "</span>"
-             + "<span>" + user.ifuserisolder + "</span>"
+             + "<span>" + user.birthDay + "</span>"
+             + "<span>" + user.isOverEighteen + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<name> " + user.nameOfUser + "</name>"
-                    + "<bd>" + user.bd + "</bd>"
-                    + "<older> " + user.ifuserisolder + "</older>";
+                    + "<bd>" + user.birthDay + "</bd>"
+                    + "<older> " + user.isOverEighteen + "</older>";
             } else {
                 //do nothing
                 return "";
@@ -52,13 +52,13 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>ShoppingCart</h1>"
              + "<span> " + shoppingCart.user + "</span>"
-             + "<span> " + shoppingCart.itens + "</span>"
+             + "<span> " + shoppingCart.listItems + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<user> " + shoppingCart.user + "</user>"
-                    + "<itens> " + shoppingCart.itens + "</itens>";
+                    + "<itens> " + shoppingCart.listItems + "</itens>";
             } else {
                 //do nothing
                 return "";
