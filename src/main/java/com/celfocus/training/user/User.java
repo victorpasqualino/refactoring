@@ -12,13 +12,13 @@ public class User {
 		this.ifUserOlder = ifUserOlder;
 	}
 
-	public String nameOfUser; // nome
+	private String nameOfUser; // nome
 
 
-	public Date birthDate; // data de nascimento
+	private Date birthDate; // data de nascimento
 
 
-	public boolean ifUserOlder; // se usuário é maior de idade
+	private boolean ifUserOlder; // se usuário é maior de idade
 
 
 	public String getNameOfUser() {

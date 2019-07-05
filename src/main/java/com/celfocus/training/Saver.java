@@ -17,10 +17,9 @@ import com.celfocus.training.user.User;
  */
 public class Saver {
 
-	public static List<User> userList = new ArrayList<>();
+	private static List<User> userList = new ArrayList<>();
 	private User user = new User(null, null, false);
 
-	public ShoppingCart shoppingCart = new ShoppingCart(this.user, null);
 
 
 	public Saver(User user) {
@@ -50,11 +49,11 @@ public class Saver {
 	/**
 	 * Cria ou atualiza o usuário
 	 */
-	public User createOrUpdateUser(String userName, Date birthDate, boolean userOlder) {
+	public User createOrUpdateUser(String userName, Date birthDate) {
 		if (findUser(userName)!=null) {
 			this.user.setNameOfUser(userName);
 			this.user.setBirthDate(birthDate);
-			this.user.setIfUserOlder(userIsOlder(userName, birthDate));  
+			this.user.setIfUserOlder(userIsOlder(birthDate));  
 			JOptionPane.showMessageDialog(null, "Update Completed");
 
 		} else {
@@ -70,7 +69,7 @@ public class Saver {
 
 	public static User findUser(String userName) {
 		for (User user : userList) {
-			if (user.nameOfUser.equals(userName)) {
+			if (user.getNameOfUser().equals(userName)) {
 				return user;
 			}
 		}
@@ -81,19 +80,14 @@ public class Saver {
 	/**
 	 * Valida se o Usuario tem mais de 65 anos.
 	 */
-	private boolean userIsOlder(String userName, Date birthDateUser) {
-
-		userName = userName.toUpperCase();
+	private boolean userIsOlder(Date birthDateUser) {
 		Calendar yearBirth = Calendar.getInstance(TimeZone.getTimeZone("Europe/Lisbon"));
 		Calendar presentYear = Calendar.getInstance(TimeZone.getTimeZone("Europe/Lisbon"));
 
 		yearBirth.setTime(birthDateUser);
 		int year = yearBirth.get(Calendar.YEAR);
 
-		if ((presentYear.get(Calendar.YEAR) - year) < 65) {
-			return false;
-		}
-		return true;
+		return ((presentYear.get(Calendar.YEAR) - year) < 65);			
 	}
 
 	/**

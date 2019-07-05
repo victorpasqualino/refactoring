@@ -4,11 +4,11 @@ package com.celfocus.training;
 
 public class ShoppingCartItem {
 
-	public ItemInfo item;
+	private ItemInfo item;
 
-	public int quantityItem;
+	private int quantityItem;
 
-	public double discount;  
+	private double discount;  
 
 
 
@@ -31,8 +31,8 @@ public class ShoppingCartItem {
 		return quantityItem;
 	}
 
-	public void setQuantityItem(double quantityToAdd) {
-		this.quantityItem = (int) quantityToAdd;
+	public void setQuantityItem(Integer quantityToAdd) {
+		this.quantityItem =  quantityToAdd;
 	}
 
 	public Double getDiscount() {

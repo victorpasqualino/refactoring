@@ -8,14 +8,13 @@ import javax.swing.JOptionPane;
 import com.celfocus.training.user.User;
 
 public class ShoppingCart {
-	public User user;
+	private User user;
 	private static List<ShoppingCartItem> shoppingCartlistItem = new ArrayList<>();
 
 
-	public ShoppingCart(User user, List<ShoppingCartItem> shoppingCartlistItem) {
+	public ShoppingCart(User user) {
 		super();
 		this.user = user;
-		ShoppingCart.shoppingCartlistItem = shoppingCartlistItem;
 	}
 
 
@@ -44,18 +43,17 @@ public class ShoppingCart {
 	public void addItemShoppingCart(String userName, String itemName, Integer quantityToAdd) {
 
 		itemName = itemName.toLowerCase().concat("_item");
-
 		if ((this.user = Saver.findUser(userName)) != null ) {
 			for (ShoppingCartItem item : shoppingCartlistItem) {
-				if(itemName == item.getItem().getName()) {
+				if(itemName.equals( item.getItem().getName())) {
 					if(quantityToAdd >0 ) 
-						item.setQuantityItem(quantityToAdd+item.getQuantityItem());
+						item.setQuantityItem(quantityToAdd + item.getQuantityItem());
 					else 
 						JOptionPane.showMessageDialog(null, "Insira uma Quantidade valida");
 
-				}else 
+				}else {
 					shoppingCartlistItem.add(item);
-
+				}
 			}
 		}
 		else {
@@ -67,13 +65,14 @@ public class ShoppingCart {
 	/**
 	 * Remover item do carrinho de compras
 	 */    
-	
+
 
 	public void removeItemShoppingCart(String userName, String itemName) {
 		itemName = itemName.toLowerCase().concat("_item");
-		if ((this.user = Saver.findUser(userName)) != null ) {
-			if(existItem(itemName,this.valueItem(itemName)) != null ) {
-				shoppingCartlistItem.remove(existItem(itemName,this.valueItem(itemName)));
+		ShoppingCartItem itemFound = existItem(itemName,this.valueItem(itemName));
+		if ((this.user = Saver.findUser(userName)) != null ) {	
+			if(itemFound != null ) {
+				shoppingCartlistItem.remove(itemFound);
 				JOptionPane.showMessageDialog(null, "Item removido");
 			}
 		}
@@ -89,8 +88,9 @@ public class ShoppingCart {
 	 */    
 
 	private Double valueItem(String itemName) {
+		
 		for (ShoppingCartItem item : shoppingCartlistItem) {
-			if(itemName == item.getItem().getName()) {
+			if(itemName.equals(item.getItem().getName())) {
 				if(item.getItem().getValor() != null)
 					return item.getItem().getValor();
 			}
@@ -109,13 +109,13 @@ public class ShoppingCart {
 	 */
 
 	private ShoppingCartItem existItem(String itemName, Double itemValue) {
+		
+		ShoppingCartItem itemFound = null;
 		for (ShoppingCartItem item : shoppingCartlistItem) {
-			if(itemName == item.getItem().getName()) 
-				if(itemValue == this.valueItem(itemName)) 
-					return item;     
+			if(itemName.equals(item.getItem().getName()) && itemValue.equals(this.valueItem(itemName))) 		
+					itemFound = item;     
 		}
-		JOptionPane.showMessageDialog(null, "Item does not exist");
-		return null;
+		return itemFound;
 	}
 
 }

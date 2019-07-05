@@ -9,7 +9,12 @@ import com.celfocus.training.ShoppingCart;
  * User For Frontent
  */
 public class UserRequesterFrontend {
-
+	
+	private String openSpan = "<span> ";
+	private String closeSpan = "</span>";
+	private String openDiv = "<div>";
+	private String closeDiv = "</div>";
+	
 	/**
 	 * Metodo utilizado para retornar o Usuario no formato do frontend solicitado
 	 * @param type tipo do frontend utilizado
@@ -18,12 +23,12 @@ public class UserRequesterFrontend {
 	 */
 	public String returnFrontendUser(String type, User user) {
 		if (type.equals("html")) {
-			return "<div>"
+			return openDiv
 					+ "<h1>User</h1>"
-					+ "<span>" + user.getNameOfUser() + "</span>"
-					+ "<span>" + user.getBirthDate() + "</span>"
-					+ "<span>" + user.getIfUserOlder() + "</span>"
-					+ "</div>";
+					+ openSpan + user.getNameOfUser() + closeSpan
+					+ openSpan + user.getBirthDate() + closeSpan
+					+ openSpan + user.getIfUserOlder() + closeSpan
+					+ closeDiv;
 		} else {
 			if (type.equals("xml")) {
 				return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
@@ -46,11 +51,11 @@ public class UserRequesterFrontend {
 	 */
 	public String returnFrontendShoppingCart(String type, ShoppingCart shoppingCart) {
 		if (type.equals("html")) {
-			return "<div>"
+			return openDiv
 					+ "<h1>ShoppingCart</h1>"
-					+ "<span> " + shoppingCart.getUser() + "</span>"
-					+ "<span> " + ShoppingCart.getShoppingCartlistItem() + "</span>"
-					+ "</div>";
+					+ openSpan + shoppingCart.getUser() + closeSpan
+					+ openSpan + ShoppingCart.getShoppingCartlistItem() + closeSpan
+					+ closeDiv;
 		} else {
 			if (type.equals("xml")) {
 				return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
@@ -73,8 +78,8 @@ public class UserRequesterFrontend {
 		if (type.equals("html")) {
 			return "<div>"
 					+ "<h1>Item</h1>"
-					+ "<span> " + item.getName()+ "</span>"
-					+ "<span> " + item.getValor() + "</span>"
+					+  openSpan + item.getName()+ closeSpan
+					+  openSpan + item.getValor() + closeSpan
 					+ "</div>";
 		} else {
 			if (type.equals("xml")) {

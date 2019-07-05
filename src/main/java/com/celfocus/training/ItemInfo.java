@@ -10,9 +10,9 @@ public class ItemInfo extends ShoppingCartItem {
 	
 
 
-	public String name;
+	private String name;
 
-	public Double valor;
+	private Double valor;
 
 
 	public String getName() {
