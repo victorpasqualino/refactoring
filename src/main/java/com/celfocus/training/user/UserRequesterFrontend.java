@@ -1,6 +1,7 @@
 package com.celfocus.training.user;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.celfocus.training.Saver;
@@ -14,6 +15,11 @@ import com.celfocus.training.util.Utils;
  */
 public class UserRequesterFrontend {
 
+    private static final String DIV_OPEN = "<div>";
+    private static final String DIV_CLOSE = "</div>";
+    private static final String SPAN_OPEN = "<span>";
+    private static final String SPAN_CLOSE = "</span>";
+
     /**
      * Metodo utilizado para retornar o Usuario no formato do frontend solicitado
      * @param type tipo do frontend utilizado
@@ -23,12 +29,12 @@ public class UserRequesterFrontend {
     public String returnFrontendUser(String type, User user) {
 
         if (type.equals("html")) {
-            return "<div>"
+            return DIV_OPEN
              + "<h1>User</h1>"
-             + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.dateOfBirth + "</span>"
-             + "<span>" + user.isOfLegalAge + "</span>"
-             + "</div>";
+             + SPAN_OPEN + user.nameOfUser + SPAN_CLOSE
+             + SPAN_OPEN + user.dateOfBirth + SPAN_CLOSE
+             + SPAN_OPEN + user.isOfLegalAge + SPAN_CLOSE
+             + DIV_CLOSE;
 
         } else if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
@@ -50,11 +56,11 @@ public class UserRequesterFrontend {
     public String returnFrontendShoppingCart(String type, ShoppingCart shoppingCart) {
 
         if (type.equals("html")) {
-            return "<div>"
+            return DIV_OPEN
              + "<h1>ShoppingCart</h1>"
-             + "<span> " + shoppingCart.user + "</span>"
-             + "<span> " + shoppingCart.items + "</span>"
-             + "</div>";
+             + SPAN_OPEN + shoppingCart.user + SPAN_CLOSE
+             + SPAN_OPEN + shoppingCart.items + SPAN_CLOSE
+             + DIV_CLOSE;
 
         } else if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
@@ -75,11 +81,11 @@ public class UserRequesterFrontend {
     public String returnFrontendItem(String type, ItemInfo item) {
 
         if (type.equals("html")) {
-            return "<div>"
+            return DIV_OPEN
              + "<h1>Item</h1>"
-             + "<span> " + item.name + "</span>"
-             + "<span> " + item.price + "</span>"
-             + "</div>";
+             + SPAN_OPEN + item.name + SPAN_CLOSE
+             + SPAN_OPEN + item.price + SPAN_CLOSE
+             + DIV_CLOSE;
 
         } else if (type.equals("xml")) {
                 return "<name> " + item.name + "</name>"
@@ -100,11 +106,12 @@ public class UserRequesterFrontend {
 
         Saver saver = new Saver();
         nameOfUser = nameOfUser.toUpperCase();
-        Date date = Utils.toDate(dateOfBirth, new SimpleDateFormat("dd/mm/yyyy"));
-        if (new Date().getYear() - date.getYear() < 18) {
+        Date birthDate = Utils.toDate(dateOfBirth, new SimpleDateFormat("yyyy"));
+        Calendar calendar = new Calendar;
+        if (calendar.get(Calendar.YEAR) - birthDate.getYear() < 18) {
             isOfLegalAge = "false";
         }
-        saver.createOrUpdateUser(nameOfUser, date, isOfLegalAge.equals("true") ? true : false);
+        saver.createOrUpdateUser(nameOfUser, birthDate, isOfLegalAge.equals("true") ? true : false);
     }
 
     /**
