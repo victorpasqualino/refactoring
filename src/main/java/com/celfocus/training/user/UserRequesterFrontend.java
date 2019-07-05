@@ -25,15 +25,15 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>User</h1>"
              + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.bd + "</span>"
-             + "<span>" + user.ifuserisolder + "</span>"
+             + "<span>" + user.dateOfBirth + "</span>"
+             + "<span>" + user.isRetired + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<name> " + user.nameOfUser + "</name>"
-                    + "<bd>" + user.bd + "</bd>"
-                    + "<older> " + user.ifuserisolder + "</older>";
+                    + "<dateOfBirth>" + user.dateOfBirth + "</dateOfBirth>"
+                    + "<older> " + user.isRetired + "</older>";
             } else {
                 //do nothing
                 return "";
@@ -52,13 +52,13 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>ShoppingCart</h1>"
              + "<span> " + shoppingCart.user + "</span>"
-             + "<span> " + shoppingCart.itens + "</span>"
+             + "<span> " + shoppingCart.items + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<user> " + shoppingCart.user + "</user>"
-                    + "<itens> " + shoppingCart.itens + "</itens>";
+                    + "<items> " + shoppingCart.items + "</items>";
             } else {
                 //do nothing
                 return "";
@@ -77,12 +77,12 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>Item</h1>"
              + "<span> " + item.name + "</span>"
-             + "<span> " + item.valor + "</span>"
+             + "<span> " + item.price + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<name> " + item.name + "</name>"
-                    + "<valor> " + item.valor + "</valor>";
+                    + "<price> " + item.price + "</price>";
             } else {
                 //do nothing
                 return "";
@@ -90,31 +90,36 @@ public class UserRequesterFrontend {
         }
     }
 
-    /**
-     * Cria ou atualiza usuario
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     */
-    public void createOrUpdateUser(String arg0, String arg1, String arg2) {
-        Saver saver = new Saver();
-
-        arg0 = arg0.toUpperCase();
-
-        Date d = Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy"));
-        if (new Date().getYear() - d.getYear() < 65) {
-            arg2 = "false";
-        }
-
-        saver.saveOrUpdateUser(arg0, Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy")), arg2.equals("true") ? true : false);
+    // Create or update user
+    public String formatName(String name){
+        return name.toUpperCase();
     }
 
-    /**
-     * Remover Usuario
-     */
-    public void deleteUser(String arg0) {
+    public Date formatDate(String dateString){
+        return Utils.toDate(dateString, new SimpleDateFormat("dd/mm/yyyy"));
+    }
+
+    int retirementAge = 65;
+    public boolean isUserRetired(Date birhDate){
+        return (new Date().getYear() - birhDate.getYear() > retirementAge);
+    }
+
+    public void createUser(String userName, String birthDate){
         Saver saver = new Saver();
-        saver.deleteUserOrNot(arg0);
+
+        saver.createNewUser(formatName(userName), formatDate(birthDate), isUserRetired(formatDate(birthDate)));
+    }
+
+    public void updateUser(String userName, String birthDate){
+        Saver saver = new Saver();
+
+        saver.updateExistingUser(formatName(userName), formatDate(birthDate), isUserRetired(formatDate(birthDate)));
+    }
+
+    // Remove user
+    public void deleteUser(String userName) {
+        Saver saver = new Saver();
+        saver.deleteUserIfExists(userName);
     }
 
     /**

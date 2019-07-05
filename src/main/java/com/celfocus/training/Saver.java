@@ -4,37 +4,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Temos 4 entidades em nosso projeto User, ShoppingCart, ShoppingCartItem e ItemInfo
- */
 public class Saver {
 
     private static final List<User> users = new ArrayList<>();
     private static final List<ShoppingCart> shoppingCarts = new ArrayList<>();
-    private static final List<ItemInfo> itens = new ArrayList<>();
+    private static final List<ItemInfo> items = new ArrayList<>();
 
     public static class User {
-        
-        public String nameOfUser; // nome
 
-        public Date bd; // data de nascimento
+        public String nameOfUser;
 
-        public boolean ifuserisolder; // se usuário é maior de idade
+        public Date dateOfBirth;
 
+        public boolean isRetired;
     }
 
     public static class ShoppingCart {
-        
+
         public User user;
 
-        public List<ShoppingCartItem> itens;
+        public List<ShoppingCartItem> items;
     }
 
     public static class ShoppingCartItem {
 
         public ItemInfo item;
 
-        public int qt;
+        public int quantity;
 
         public double discount;
 
@@ -44,55 +40,46 @@ public class Saver {
 
         public String name;
 
-        public double valor;
+        public double price;
     }
 
-    public User saveOrUpdateUser(String name, Date bd, boolean ifuserisolder) {
-        if (eu(name)) {
-            User user = fu(name);
-            user.bd = bd;
-            user.ifuserisolder = ifuserisolder;
-            ShoppingCart found = null;
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.user == user) {
-                    found = var;
-                }
-            }
 
-            if (found != null) {
-                //do nothing
-            } else {
-                ShoppingCart s = new ShoppingCart();
-                s.user = user;
-                shoppingCarts.add(s);
-            }
-            users.add(user);
-            return user;
-        } else {
-            User user = new User();
-            user.bd = bd;
-            user.nameOfUser = name;
-            user.ifuserisolder = ifuserisolder;
-            users.add(user);
-            ShoppingCart s = new ShoppingCart();
-            s.user = user;
-            s.itens = new ArrayList<>();
-            shoppingCarts.add(s);
-            return user;
+    public User createNewUser(String name, Date dateOfBirth, boolean isRetired){
+        User user = new User();
+        user.dateOfBirth = dateOfBirth;
+        user.nameOfUser = name;
+        user.isRetired = isRetired;
+        users.add(user);
+
+        //create a new empty shopping cart associated to the new user
+        newShoppingCart(user);
+
+        return user;
+    }
+
+    public User updateExistingUser(String name, Date dateOfBirth, boolean isRetired){
+        User user = findUser(name);
+        user.dateOfBirth = dateOfBirth;
+        user.isRetired = isRetired;
+
+        ShoppingCart userShoppingCart = findUserShoppingCart(user);
+        if (userShoppingCart == null) {
+            newShoppingCart(user);
         }
+        users.add(user);
+        return user;
     }
 
-    private boolean eu(String name) {
-        User userFound = null;
+    private boolean userExists(String name) {
         for (User user : users) {
             if (user.nameOfUser.equals(name)) {
-                userFound = user;
+                return true;
             }
         }
-        return userFound != null;
+        return false;
     }
 
-    private User fu(String name) {
+    private User findUser(String name) {
         User userFound = null;
         for (User user : users) {
             if (user.nameOfUser.equals(name)) {
@@ -102,9 +89,45 @@ public class Saver {
         return userFound;
     }
 
-    public ItemInfo encontrarItem(String name) {
+    public void deleteUserIfExists(String name) {
+        User user = findUser(name);
+        if(user != null){
+            users.remove(user);
+        }
+    }
+
+
+    public void newShoppingCart(User user) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.user = user;
+        shoppingCart.items = new ArrayList<>();
+        shoppingCarts.add(shoppingCart);
+    }
+
+    public ShoppingCart findUserShoppingCart(User user) {
+        for (ShoppingCart shoppingCart : shoppingCarts) {
+            if (shoppingCart.user == user) {
+                return shoppingCart;
+            }
+        }
+        return null;
+    }
+
+
+    // change this directly in  UserFrontEndRequest.java
+    public User saveOrUpdateUser(String name, Date dateOfBirth, boolean isRetired) {
+        if (userExists(name)) {
+            return updateExistingUser(name, dateOfBirth, isRetired);
+        } else {
+           return createNewUser(name, dateOfBirth, isRetired);
+        }
+    }
+
+
+    // ItemInfo
+    public ItemInfo findItem(String name) {
         ItemInfo itemFound = null;
-        for (ItemInfo item : itens) {
+        for (ItemInfo item : items) {
             if (item.name.equals(name)) {
                 itemFound = item;
             }
@@ -112,66 +135,43 @@ public class Saver {
         return itemFound;
     }
 
-    public void deleteUserOrNot(String name) {
-        User userFound = null;
-        for (User user : users) {
-            if (user.nameOfUser.equals(name)) {
-                userFound = user;
-            }
-        }
-        if (userFound == null) {
-        } else {
-            users.remove(userFound);
-        }
-    }
 
-    public void aIU(String user, String nameItem, int qt) {
-        User userFound = null;
-        for (User user1 : users) {
-            if (user1.nameOfUser.equals(user)) {
-                userFound = user1;
-            }
+    public void aIU(String userName, String nameItem, int quantity) {
+        User userFound = findUser(userName);
+
+        if(userFound == null){
+            return;
+        } else {
+            ShoppingCart foundShoppingCart = findUserShoppingCart(userFound);
+
+
         }
 
         if (userFound != null) {
-            ShoppingCart found = null;
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.user == userFound) {
-                    found = var;
-                }
-            }
+            ShoppingCart foundShoppingCart = findUserShoppingCart(userFound);
 
-            if (found != null) {
+            if (foundShoppingCart != null) {
                 ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : found.itens) {
+                for (ShoppingCartItem s : foundShoppingCart.items) {
                     if (s.item.name == nameItem) {
                         scif = s;
                     }
                 }
 
                 if (scif != null) {
-                    scif.qt += qt;
+                    scif.quantity += quantity;
                 } else {
-                    ItemInfo ifo = null;
-                    for (ItemInfo item : itens) {
-                        if (item.name.equals(nameItem)) {
-                            ifo = item;
-                        }
-                    }
+                    ItemInfo ifo = findItem(nameItem);
 
                     if (ifo != null) {
                         ShoppingCartItem s1 = new ShoppingCartItem();
                         s1.item = ifo;
-                        s1.qt = qt;
-                        if ( userFound.ifuserisolder
-                 == true && (new Date().getYear() - userFound.bd.getYear() < 80) ) {
+                        s1.quantity = quantity;
+                        if ( userFound.isRetired && (new Date().getYear() - userFound.dateOfBirth.getYear() < 80) ) {
                             s1.discount = 0.2; 
-                        } else if (userFound.ifuserisolder
-                 == true) {
+                        } else if (userFound.isRetired) {
                             s1.discount = 0.1;
                         }
-                    } else {
-
                     }
                     
                 }
@@ -188,23 +188,18 @@ public class Saver {
         }
 
         if (userFound != null) {
-            ShoppingCart found = null;
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.user == userFound) {
-                    found = var;
-                }
-            }
+            ShoppingCart found = findUserShoppingCart(userFound);
 
             if (found != null) {
                 ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : found.itens) {
+                for (ShoppingCartItem s : found.items) {
                     if (s.item.name == nameItem) {
                         scif = s;
                     }
                 }
 
                 if (scif != null) {
-                    found.itens.remove(scif);
+                    found.items.remove(scif);
                 }
             }
         }
@@ -212,7 +207,7 @@ public class Saver {
 
     public void citemifnotexists(String arg0, double v) {
         ItemInfo f = null;
-        for (ItemInfo i : itens){
+        for (ItemInfo i : items){
             if (i.name == arg0) {
                 f = i;
             }
@@ -223,8 +218,8 @@ public class Saver {
         } else {
             ItemInfo ift = new ItemInfo();
             ift.name = arg0;
-            ift.valor = v;
-            itens.add(ift);
+            ift.price = v;
+            items.add(ift);
         }
     }
 
