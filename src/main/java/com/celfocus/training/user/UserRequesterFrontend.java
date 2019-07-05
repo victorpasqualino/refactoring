@@ -92,40 +92,40 @@ public class UserRequesterFrontend {
 
     /**
      * Cria ou atualiza usuario
-     * @param arg0
-     * @param arg1
-     * @param arg2
+     * @param name
+     * @param date
+     * @param argumento
      */
-    public void createOrUpdateUser(String arg0, String arg1, String arg2) {
+    public void createOrUpdateUser(String name, String date, String argumento) {
         Saver saver = new Saver();
 
-        arg0 = arg0.toUpperCase();
+        name = name.toUpperCase();
 
-        Date d = Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy"));
+        Date d = Utils.toDate(date, new SimpleDateFormat("dd/mm/yyyy"));
         if (new Date().getTime() - d.getTime() < 65) {
-            arg2 = "false";
+            argumento = "false";
         }
 
-        saver.save(arg0, Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy")), arg2.equals("true") ? true : false);
+        saver.save(name, Utils.toDate(date, new SimpleDateFormat("dd/mm/yyyy")), argumento.equals("true") ? true : false);
     }
 
     /**
      * Remover Usuario
      */
-    public void deleteUser(String arg0) {
+    public void deleteUser(String name) {
         Saver saver = new Saver();
-        saver.delete(arg0);
+        saver.delete(name);
     }
 
     /**
      * Adicionar itemInfo ao carrinho
      */
-    public void aitemShopping(String user, String nameItem, int qt) {
+    public void addditemToCart(String user, String nameItem, int quantity) {
         Saver saver = new Saver();
 
         nameItem = nameItem.toLowerCase().concat("_item");
 
-        saver.addItemToCart(user, nameItem, qt);
+        saver.addItemToCart(user, nameItem, quantity);
     }
 
 }

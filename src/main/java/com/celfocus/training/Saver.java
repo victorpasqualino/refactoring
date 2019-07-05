@@ -47,11 +47,11 @@ public class Saver {
         public double valor;
     }
 
-    public User save(String name, Date bd, boolean ifuserisolder) {
+    public User save(String name, Date date, boolean isAdult) {
 
         User user = findUsers(name);
-        user.birthDate = bd;
-        user.isAdult = ifuserisolder;
+        user.birthDate = date;
+        user.isAdult = isAdult;
         ShoppingCart found = null;
         for (ShoppingCart var : shoppingCarts) {
             if (var.user == user) {
