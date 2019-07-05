@@ -104,15 +104,15 @@ public class Saver {
     }
 
     public ShoppingCartItem findShoppingCartItem(ShoppingCart shoppingCartFound, String itemName) {
+        ShoppingCartItem shoppingCartItemFound = null;
         if (shoppingCartFound != null) {
-            ShoppingCartItem shoppingCartItemFound = null;
             for (ShoppingCartItem shoppingCartItem : shoppingCartFound.getItems()) {
                 if (shoppingCartItem.getItem().getItemName().equals(itemName)) {
                     shoppingCartItemFound = shoppingCartItem;
                 }
             }
         }
-        return shoppingCartItemFound
+        return shoppingCartItemFound;
     }
 
     public void addShoppingItemToUserCart(String username, String itemName, int quantity) {
@@ -121,30 +121,27 @@ public class Saver {
         ShoppingCartItem shoppingCartItemFound = findShoppingCartItem(shoppingCartFound, itemName);
 
 
-
-            if (shoppingCartItemFound != null) {
-                shoppingCartItemFound.setQuantity(shoppingCartItemFound.getQuantity() + quantity);
-            } else {
-                Item itemFound = null;
-                for (Item item : itemList) {
-                    if (item.getItemName().equals(itemName)) {
-                        itemFound = item;
-                    }
+        if (shoppingCartItemFound != null) {
+            shoppingCartItemFound.setQuantity(shoppingCartItemFound.getQuantity() + quantity);
+        } else {
+            Item itemFound = null;
+            for (Item item : itemList) {
+                if (item.getItemName().equals(itemName)) {
+                    itemFound = item;
                 }
+            }
 
-                if (itemFound != null) {
-                    ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-                    shoppingCartItem.setItem(itemFound);
-                    shoppingCartItem.setQuantity(quantity);
-                    if (userFound.isSenior() && (new Date().getYear() - userFound.getBirthDate().getYear() < 80)) {
-                        shoppingCartItem.setDiscount(0.2);
-                    } else if (userFound.isSenior()) {
-                        shoppingCartItem.setDiscount(0.1);
-                    }
+            if (itemFound != null) {
+                ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+                shoppingCartItem.setItem(itemFound);
+                shoppingCartItem.setQuantity(quantity);
+                if (userFound.isSenior() && (new Date().getYear() - userFound.getBirthDate().getYear() < 80)) {
+                    shoppingCartItem.setDiscount(0.2);
+                } else if (userFound.isSenior()) {
+                    shoppingCartItem.setDiscount(0.1);
                 }
             }
         }
-
     }
 
     public void removeShoppingCartItem(String user, String itemName) {
@@ -194,4 +191,4 @@ public class Saver {
         }
     }
 
-} 
+}
