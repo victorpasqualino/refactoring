@@ -14,18 +14,20 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.log4j.Logger;
 
 public final class Utils {
 
-    private Utils() {};
+    private static Logger logger = Logger.getLogger(Utils.class);
+    private Utils() {}
 
-    static MessageDigest SHA256;
+    private static MessageDigest sHA256;
     
     static {
         try {
-            SHA256 = MessageDigest.getInstance("SHA-256");
+            sHA256 = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            logger.error(e);
         }
     }
     
@@ -34,7 +36,7 @@ public final class Utils {
     }
     
     public static byte[] toSHA256(byte[] bytes) {
-        return SHA256.digest(bytes);
+        return sHA256.digest(bytes);
     }
 
     public static boolean isNullOrEmpty(String str) {
@@ -65,8 +67,9 @@ public final class Utils {
         try {
             return format.parse(date);
         } catch (ParseException ex) {
-            throw new RuntimeException(ex);
+            logger.error(ex);
         }
+        return null;
     }
 
     public static String toString(Date date, String format) {
@@ -105,7 +108,7 @@ public final class Utils {
             throw new IllegalArgumentException("Length should be pair");
         }
         int length = ts.length / 2;
-        Map<K, V> map = new HashMap<K, V>(length);
+        Map<K, V> map = new HashMap<>(length);
         for (int index = 0; index <= length; index+=2) {
             map.put((K) ts[index], (V) ts[index + 1]);
         }
