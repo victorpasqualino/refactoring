@@ -14,6 +14,7 @@ public class Saver {
     private static final List<ItemInfo> itens = new ArrayList<>();
 
     public static class User {
+
         
         public String nameOfUser; // nome
 
