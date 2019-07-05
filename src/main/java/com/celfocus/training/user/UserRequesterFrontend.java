@@ -14,6 +14,13 @@ import com.celfocus.training.util.Utils;
  */
 public class UserRequesterFrontend {
 
+    private static final String DIV = "<div>";
+    private static final String CDIV = "</div>";
+    private static final String SPAN = "<span>";
+    private static final String CSPAN = "</span>";
+    private static final String H1 = "<h1>";
+    private static final String CH1 = "</h1>";
+
     /**
      * Metodo utilizado para retornar o Usuario no formato do frontend solicitado
      * @param type tipo do frontend utilizado
@@ -22,12 +29,12 @@ public class UserRequesterFrontend {
      */
     public String returnFrontendUser(String type, User user) {
         if (type.equals("html")) {
-            return "<div>"
-             + "<h1>User</h1>"
-             + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.bd + "</span>"
-             + "<span>" + user.ifuserisolder + "</span>"
-             + "</div>";
+            return DIV
+             + H1 + "User" + CH1
+             + SPAN + user.nameOfUser + CSPAN
+             + SPAN + user.bd + CSPAN
+             + SPAN + user.ifuserisolder + CSPAN
+             + CDIV;
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
@@ -49,11 +56,11 @@ public class UserRequesterFrontend {
      */
     public String returnFrontendShoppingCart(String type, ShoppingCart shoppingCart) {
         if (type.equals("html")) {
-            return "<div>"
-             + "<h1>ShoppingCart</h1>"
-             + "<span> " + shoppingCart.user + "</span>"
-             + "<span> " + shoppingCart.itens + "</span>"
-             + "</div>";
+            return DIV
+             + H1 + "ShoppingCart" + CH1
+             + SPAN + shoppingCart.user + CSPAN
+             + SPAN + shoppingCart.itens + CSPAN
+             + CDIV;
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
@@ -74,11 +81,11 @@ public class UserRequesterFrontend {
      */
     public String returnFrontendItem(String type, ItemInfo item) {
         if (type.equals("html")) {
-            return "<div>"
-             + "<h1>Item</h1>"
-             + "<span> " + item.name + "</span>"
-             + "<span> " + item.valor + "</span>"
-             + "</div>";
+            return DIV
+             + H1 + "Item" + CH1
+             + SPAN + item.name + CSPAN
+             + SPAN + item.valor + CSPAN
+             + CDIV;
         } else {
             if (type.equals("xml")) {
                 return "<name> " + item.name + "</name>"
