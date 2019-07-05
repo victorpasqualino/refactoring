@@ -194,9 +194,7 @@ public class Saver {
             }
         }
 
-        if ( f != null ) {
-
-        } else {
+        if ( f == null ) {
             ItemInfo ift = new ItemInfo();
             ift.setName(arg0);
             ift.setValor(v);
