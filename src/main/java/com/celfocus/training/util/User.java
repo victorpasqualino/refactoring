@@ -2,22 +2,47 @@ package com.celfocus.training.util;
 
 import com.celfocus.training.Saver;
 
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
+
 
 public class User {
 
-    private static final List<User> users = new ArrayList<>();
-    private static final List<Saver.ShoppingCart> listShoppingCarts = new ArrayList<>();
-    private static final List<Saver.ItemInfo> itens = new ArrayList<>();
+    private String name;
+    private Date birthDate;
+    private boolean older;
 
-    public String nameOfUser;
+    public String getName() {
+        return name;
+    }
 
-    public Date birthDay;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public boolean isOverEighteen;
+    public Date getBirthDate() {
+        return birthDate;
+    }
 
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
 
+    public boolean isOlder() {
+        return older;
+    }
+
+    public void setOlder(boolean older) {
+        this.older = older;
+    }
+
+    public User() {
+    }
+
+    public User(String name, Date birthDate, boolean older) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.older = older;
+    }
 }
 
