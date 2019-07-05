@@ -14,12 +14,12 @@ public class Saver {
     private static final List<Item> itemList = new ArrayList<>();
 
 
-    public User saveOrUpdateUser(String username, Date birthDate, boolean isOfAge) {
-        return isUser(username) ? updateUser(username, birthDate, isOfAge) : saveUser(username, birthDate, isOfAge);
+    public User saveOrUpdateUser(String username, Date birthDate, boolean isSenior) {
+        return isUser(username) ? updateUser(username, birthDate, isSenior) : saveUser(username, birthDate, isSenior);
     }
 
-    private User saveUser(String username, Date birthDate, boolean isOfAge) {
-        User user = new User(username, birthDate, isOfAge);
+    private User saveUser(String username, Date birthDate, boolean isSenior) {
+        User user = new User(username, birthDate, isSenior);
         userList.add(user);
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
@@ -28,13 +28,13 @@ public class Saver {
         return user;
     }
 
-    private User updateUser(String username, Date birthDate, boolean isOfAge) {
+    private User updateUser(String username, Date birthDate, boolean isSenior) {
         User user = getUserByUsername(username);
         if (user == null) {
             return null;
         }
         user.setBirthDate(birthDate);
-        user.setOfAge(isOfAge);
+        user.setSenior(isSenior);
 
         ShoppingCart found = null;
         for (ShoppingCart shoppingCart : shoppingCartList) {
@@ -90,48 +90,56 @@ public class Saver {
         }
     }
 
-    public void aIU(String username, String itemName, int quantity) {
-        User userFound = getUserByUsername(username);
+    private ShoppingCart findShoppingCartByUser(User user) {
+        ShoppingCart shoppingCartFound = null;
 
-        if (userFound != null) {
-            ShoppingCart shoppingCartFound = null;
+        if (user != null) {
             for (ShoppingCart shoppingCart : shoppingCartList) {
-                if (shoppingCart.getUser() == userFound) {
+                if (shoppingCart.getUser() == user) {
                     shoppingCartFound = shoppingCart;
                 }
             }
+        }
+        return shoppingCartFound;
 
-            if (shoppingCartFound != null) {
-                ShoppingCartItem shoppingCartItemFound = null;
-                for (ShoppingCartItem shoppingCartItem : shoppingCartFound.getItems()) {
-                    if (shoppingCartItem.getItem().getItemName().equals(itemName)) {
-                        shoppingCartItemFound = shoppingCartItem;
+    }
+
+    public void addShoppingItemToUserCart(String username, String itemName, int quantity) {
+        User userFound = getUserByUsername(username);
+        ShoppingCart shoppingCartFound = findShoppingCartByUser(userFound);
+
+
+        if (shoppingCartFound != null) {
+            ShoppingCartItem shoppingCartItemFound = null;
+            for (ShoppingCartItem shoppingCartItem : shoppingCartFound.getItems()) {
+                if (shoppingCartItem.getItem().getItemName().equals(itemName)) {
+                    shoppingCartItemFound = shoppingCartItem;
+                }
+            }
+
+            if (shoppingCartItemFound != null) {
+                shoppingCartItemFound.setQuantity(shoppingCartItemFound.getQuantity() + quantity);
+            } else {
+                Item itemFound = null;
+                for (Item item : itemList) {
+                    if (item.getItemName().equals(itemName)) {
+                        itemFound = item;
                     }
                 }
 
-                if (shoppingCartItemFound != null) {
-                    shoppingCartItemFound.setQuantity(shoppingCartItemFound.getQuantity() + quantity);
-                } else {
-                    Item itemInfo = null;
-                    for (Item item : itemList) {
-                        if (item.getItemName().equals(itemName)) {
-                            itemInfo = item;
-                        }
-                    }
-
-                    if (itemInfo != null) {
-                        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-                        shoppingCartItem.setItem(itemInfo);
-                        shoppingCartItem.setQuantity(quantity);
-                        if (userFound.isOfAge() && (new Date().getYear() - userFound.getBirthDate().getYear() < 80)) {
-                            shoppingCartItem.setDiscount(0.2);
-                        } else if (userFound.isOfAge()) {
-                            shoppingCartItem.setDiscount(0.1);
-                        }
+                if (itemFound != null) {
+                    ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+                    shoppingCartItem.setItem(itemFound);
+                    shoppingCartItem.setQuantity(quantity);
+                    if (userFound.isSenior() && (new Date().getYear() - userFound.getBirthDate().getYear() < 80)) {
+                        shoppingCartItem.setDiscount(0.2);
+                    } else if (userFound.isSenior()) {
+                        shoppingCartItem.setDiscount(0.1);
                     }
                 }
             }
         }
+
     }
 
     public void rIU(String user, String itemName) {

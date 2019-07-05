@@ -122,10 +122,10 @@ public class UserRequesterFrontend {
     /**
      * Adicionar item ao carrinho
      */
-    public void aitemShopping(String user, String nameItem, int qt) {
+    public void addShoppingItem(String user, String nameItem, int qt) {
         nameItem = nameItem.toLowerCase().concat("_item");
 
-        saver.aIU(user, nameItem, qt);
+        saver.addShoppingItemToUserCart(user, nameItem, qt);
     }
 
 }

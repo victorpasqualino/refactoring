@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class User {
 
-    public User(String username, Date birthDate, boolean isOfAge) {
+    public User(String username, Date birthDate, boolean isSenior) {
         this.username = username;
         this.birthDate = birthDate;
-        this.isOfAge = isOfAge;
+        this.isSenior = isSenior;
     }
 
     private String username;
     private Date birthDate;
-    private boolean isOfAge;
+    private boolean isSenior;
 
     public String getUsername() {
         return username;
@@ -30,11 +30,11 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public boolean isOfAge() {
-        return isOfAge;
+    public boolean isSenior() {
+        return isSenior;
     }
 
-    public void setOfAge(boolean ofAge) {
-        isOfAge = ofAge;
+    public void setSenior(boolean isSenior) {
+        this.isSenior = isSenior;
     }
 }
