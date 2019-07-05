@@ -63,6 +63,7 @@ public class FrontendRequestTest extends TestCase {
 		request.addItemToShoppingCart(user2.getName(), item03, 3);
 		request.addItemToShoppingCart(user2.getName(), item03, 2);
 
+		request.removeItemFromUser(user2.getName(), "baditemname");
 		request.removeItemFromUser(user2.getName(), item03);
 
 		// Test delete

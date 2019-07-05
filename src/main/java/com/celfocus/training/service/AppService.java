@@ -83,7 +83,7 @@ public class AppService {
 		Objects.requireNonNull(shoppingCart);
 
 		for (ShoppingCartItem item : shoppingCart.getItems()) {
-			if (itemName.equals(item.getInfo().getName())) {
+			if (Utils.convertItemName(itemName).equals(item.getInfo().getName())) {
 				shoppingCart.getItems().remove(item);
 				itemService.delete(itemName);
 				break;
