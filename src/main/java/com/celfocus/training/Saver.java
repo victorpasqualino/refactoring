@@ -46,12 +46,14 @@ public class Saver {
 
         if (userExists(name)) {
             User user = findUser(name);
-            user.dateOfBirth = dateOfBirth;
-            user.isOfLegalAge = isOfLegalAge;
-            ShoppingCart existingShoppingCart = null;
-            for (ShoppingCart shoppingCart : shoppingCarts) {
-                if (shoppingCart.user == user) {
-                    existingShoppingCart = shoppingCart;
+            if(user != null) {
+                user.dateOfBirth = dateOfBirth;
+                user.isOfLegalAge = isOfLegalAge;
+                ShoppingCart existingShoppingCart = null;
+                for (ShoppingCart shoppingCart : shoppingCarts) {
+                    if (shoppingCart.user == user) {
+                        existingShoppingCart += shoppingCart;
+                    }
                 }
             }
             if (existingShoppingCart == null) {
@@ -151,10 +153,12 @@ public class Saver {
                 shoppingCartItem.item = itemFound;
                 shoppingCartItem.quantity = quantity;
                 int year = Year.now().getValue();
-                if (userFound.isOfLegalAge && (year - userFound.dateOfBirth.getYear() < 80)) {
-                    shoppingCartItem.discount = 0.2;
-                } else {
-                    shoppingCartItem.discount = 0.1;
+                if(userFound != null) {
+                    if (userFound.isOfLegalAge && (year - userFound.dateOfBirth.getYear() < 80)) {
+                        shoppingCartItem.discount = 0.2;
+                    } else {
+                        shoppingCartItem.discount = 0.1;
+                    }
                 }
             }
         }

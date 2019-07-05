@@ -17,7 +17,6 @@ import org.apache.commons.codec.binary.Hex;
 
 public final class Utils {
 
-    private Utils() {};
     static MessageDigest SHA256;
     static {
         try {
