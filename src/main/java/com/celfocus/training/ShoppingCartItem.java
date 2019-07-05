@@ -11,6 +11,7 @@ public class ShoppingCartItem {
 	public double discount;  
 
 
+
 	public ShoppingCartItem(ItemInfo item, Integer quantityItem, Double discount) {
 		super();
 		this.item = item;

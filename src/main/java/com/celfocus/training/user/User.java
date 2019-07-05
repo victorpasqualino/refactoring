@@ -2,6 +2,7 @@ package com.celfocus.training.user;
 
 import java.util.Date;
 
+
 public class User {
 
 	public User(String nameOfUser, Date birthDate, boolean ifUserOlder) {

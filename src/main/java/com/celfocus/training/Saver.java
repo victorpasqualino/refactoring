@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import com.celfocus.training.user.User;
 
 
-
 /**
  * Temos 4 entidades em nosso projeto User, ShoppingCart, ShoppingCartItem e ItemInfo
  */
@@ -59,9 +58,11 @@ public class Saver {
 			this.user.setNameOfUser(userName);
 			this.user.setBirthDate(birthDate);
 			this.user.setIfUserOlder(userIsOlder(userName, birthDate));  
+			JOptionPane.showMessageDialog(null, "Update Completed");
 
 		} else {
 			userList.add(this.user);
+			JOptionPane.showMessageDialog(null, "User Added");
 		}
 		return user;
 	}

@@ -37,6 +37,7 @@ public class UserRequesterFrontend {
 		}
 	}
 
+	
 	/**
 	 * Metodo utilizado para retornar o Shoppingcart no formato do frontend solicitado
 	 * @param type tipo do frontend utilizado

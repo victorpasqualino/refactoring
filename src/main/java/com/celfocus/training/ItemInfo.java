@@ -2,11 +2,13 @@ package com.celfocus.training;
 
 public class ItemInfo extends ShoppingCartItem {
 
-
-	public ItemInfo(ItemInfo item, Integer quantityItem, Double discount) {
+	public ItemInfo(ItemInfo item, Integer quantityItem, Double discount, String name, Double valor) {
 		super(item, quantityItem, discount);
-		// TODO Auto-generated constructor stub
+		this.name = name;
+		this.valor = valor;
 	}
+	
+
 
 	public String name;
 
@@ -25,7 +27,7 @@ public class ItemInfo extends ShoppingCartItem {
 		return valor;
 	}
 
-	public void setValor(double valor) {
+	public void setValor(Double valor) {
 		this.valor = valor;
 	}
 }
