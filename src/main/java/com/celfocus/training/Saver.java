@@ -101,14 +101,9 @@ public class Saver {
             }
         }
         return shoppingCartFound;
-
     }
 
-    public void addShoppingItemToUserCart(String username, String itemName, int quantity) {
-        User userFound = getUserByUsername(username);
-        ShoppingCart shoppingCartFound = findShoppingCartByUser(userFound);
-
-
+    public ShoppingCartItem findShoppingCartItem(ShoppingCart shoppingCartFound, String itemName) {
         if (shoppingCartFound != null) {
             ShoppingCartItem shoppingCartItemFound = null;
             for (ShoppingCartItem shoppingCartItem : shoppingCartFound.getItems()) {
@@ -116,6 +111,16 @@ public class Saver {
                     shoppingCartItemFound = shoppingCartItem;
                 }
             }
+        }
+        return shoppingCartItemFound
+    }
+
+    public void addShoppingItemToUserCart(String username, String itemName, int quantity) {
+        User userFound = getUserByUsername(username);
+        ShoppingCart shoppingCartFound = findShoppingCartByUser(userFound);
+        ShoppingCartItem shoppingCartItemFound = findShoppingCartItem(shoppingCartFound, itemName);
+
+
 
             if (shoppingCartItemFound != null) {
                 shoppingCartItemFound.setQuantity(shoppingCartItemFound.getQuantity() + quantity);
@@ -142,7 +147,7 @@ public class Saver {
 
     }
 
-    public void rIU(String user, String itemName) {
+    public void removeShoppingCartItem(String user, String itemName) {
         User userFound = null;
         for (User user1 : userList) {
             if (user1.getUsername().equals(user)) {

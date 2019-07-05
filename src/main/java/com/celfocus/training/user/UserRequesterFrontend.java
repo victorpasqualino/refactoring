@@ -34,14 +34,14 @@ public class UserRequesterFrontend {
              + H1 + "User" + CH1
              + SPAN + user.getUsername() + CSPAN
              + SPAN + user.getBirthDate() + CSPAN
-             + SPAN + user.isOfAge() + CSPAN
+             + SPAN + user.isSenior() + CSPAN
              + CDIV;
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<name> " + user.getUsername() + "</name>"
                     + "<bd>" + user.getBirthDate() + "</bd>"
-                    + "<older> " + user.isOfAge() + "</older>";
+                    + "<older> " + user.isSenior() + "</older>";
             } else {
                 //do nothing
                 return "";
