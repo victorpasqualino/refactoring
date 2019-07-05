@@ -21,7 +21,6 @@ public class Saver {
 
     public User saveOrUpdateUser(String name, Date birthDay, boolean overEighteen) {
         if (existUser(name)) {
-            //updtateUser(name);
             User user = findUser(name);
             user = fillUserInfo(user,birthDay,overEighteen);
             ShoppingCart foundCart = userHasShoppingCart(user);
@@ -35,7 +34,6 @@ public class Saver {
                 return user;
             }
         } else {
-            //saveUser(name);
             User user = new User();
             user.setNameOfUser(name);
             users.add(fillUserInfo(user,birthDay,overEighteen));
@@ -164,21 +162,30 @@ public class Saver {
         }
     }
 
-    public void rIU(String user, String nameItem) {
-        User userFound = null;
-        for (User user1 : users) {
-            if (user1.getNameOfUser().equals(user)) {
-                userFound = user1;
-            }
+private User findUser(User user){
+    for (User user1 : users) {
+        if (user1.getNameOfUser().equals(user)) {
+            userFound = user1;
         }
+    }
+        return userFound;
+}
+
+private ShoppingCart findShoppingCart(User userFound) {
+    ShoppingCart found = null;
+    for (ShoppingCart var : shoppingCarts) {
+        if (var.getUser() == userFound) {
+            found = var;
+        }
+    }
+
+
+}
+    public void rIU(String user, String nameItem) {
+        User userFound = findUser(user);
 
         if (userFound != null) {
-            ShoppingCart found = null;
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.getUser() == userFound) {
-                    found = var;
-                }
-            }
+            ShoppingCart found = findShoppingCart(userFound);
 
             if (found != null) {
                 ShoppingCartItem scif = null;
