@@ -10,22 +10,25 @@ public class Saver {
     private static final List<ShoppingCart> shoppingCarts = new ArrayList<>();
     private static final List<ItemInfo> items = new ArrayList<>();
 
-    public static class User {
+
+
+    /* public static class User {
 
         public String nameOfUser;
 
         public Date dateOfBirth;
 
         public boolean isRetired;
-    }
+    } */
 
-    public static class ShoppingCart {
+/*    public static class ShoppingCart {
 
         public User user;
 
         public List<ShoppingCartItem> items;
-    }
+    }*/
 
+/*
     public static class ShoppingCartItem {
 
         public ItemInfo item;
@@ -35,16 +38,17 @@ public class Saver {
         public double discount;
 
     }
+*/
 
-    public static class ItemInfo {
+/*    public static class ItemInfo {
 
         public String name;
 
         public double price;
-    }
+    }*/
 
 
-    public User createNewUser(String name, Date dateOfBirth, boolean isRetired){
+    public User createNewUser(String name, Date dateOfBirth, boolean isRetired) {
         User user = new User();
         user.dateOfBirth = dateOfBirth;
         user.nameOfUser = name;
@@ -57,7 +61,7 @@ public class Saver {
         return user;
     }
 
-    public User updateExistingUser(String name, Date dateOfBirth, boolean isRetired){
+    public User updateExistingUser(String name, Date dateOfBirth, boolean isRetired) {
         User user = findUser(name);
         user.dateOfBirth = dateOfBirth;
         user.isRetired = isRetired;
@@ -91,7 +95,7 @@ public class Saver {
 
     public void deleteUserIfExists(String name) {
         User user = findUser(name);
-        if(user != null){
+        if (user != null) {
             users.remove(user);
         }
     }
@@ -119,7 +123,7 @@ public class Saver {
         if (userExists(name)) {
             return updateExistingUser(name, dateOfBirth, isRetired);
         } else {
-           return createNewUser(name, dateOfBirth, isRetired);
+            return createNewUser(name, dateOfBirth, isRetired);
         }
     }
 
@@ -135,89 +139,84 @@ public class Saver {
         return itemFound;
     }
 
+    public boolean validateAddItemToCart(User user, ShoppingCart foundShoppingCart) {
+        if (user != null && foundShoppingCart != null) {
+            return true;
+        }
+        return false;
+    }
 
-    public void aIU(String userName, String nameItem, int quantity) {
+    public ShoppingCartItem findShoppingCartItem(ShoppingCart shoppingCart, String nameItem) {
+        ShoppingCartItem shoppingCartItem = null;
+        for (ShoppingCartItem item : shoppingCart.items) {
+            if (item.itemInfo.name.equals(nameItem)) {
+                shoppingCartItem = item;
+            }
+        }
+        return shoppingCartItem;
+    }
+
+    public double getDiscount(User userFound, ShoppingCartItem shoppingCartItem) {
+        if (userFound.isRetired && (new Date().getYear() - userFound.dateOfBirth.getYear() < 80)) {
+            return shoppingCartItem.discount = 0.2;
+        } else if (userFound.isRetired) {
+            return shoppingCartItem.discount = 0.1;
+        }
+        double noDiscount = 0;
+        return noDiscount;
+    }
+
+
+    public void addItemToShoppingCart(String userName, String nameItem, int quantity) {
         User userFound = findUser(userName);
 
-        if(userFound == null){
-            return;
-        } else {
-            ShoppingCart foundShoppingCart = findUserShoppingCart(userFound);
+        ShoppingCart foundShoppingCart = findUserShoppingCart(userFound);
 
+        ShoppingCartItem itemInfo = findShoppingCartItem(foundShoppingCart, nameItem);
+
+        if (validateAddItemToCart(userFound, foundShoppingCart)) {
+            if (itemInfo != null) {
+                itemInfo.quantity += quantity;
+            } else {
+                ItemInfo newItem = findItem(nameItem);
+
+                if (newItem != null) {
+                    ShoppingCartItem newCartItem = new ShoppingCartItem();
+                    newCartItem.itemInfo = newItem;
+                    newCartItem.quantity = quantity;
+                    newCartItem.discount = getDiscount(userFound, newCartItem);
+                }
+
+            }
 
         }
+    }
+
+    public void removeItemFromShoppingCart(String userName, String nameItem) {
+        User userFound = findUser(userName);
 
         if (userFound != null) {
             ShoppingCart foundShoppingCart = findUserShoppingCart(userFound);
 
             if (foundShoppingCart != null) {
                 ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : foundShoppingCart.items) {
-                    if (s.item.name == nameItem) {
-                        scif = s;
-                    }
-                }
+                scif = findShoppingCartItem(foundShoppingCart, nameItem);
 
                 if (scif != null) {
-                    scif.quantity += quantity;
-                } else {
-                    ItemInfo ifo = findItem(nameItem);
-
-                    if (ifo != null) {
-                        ShoppingCartItem s1 = new ShoppingCartItem();
-                        s1.item = ifo;
-                        s1.quantity = quantity;
-                        if ( userFound.isRetired && (new Date().getYear() - userFound.dateOfBirth.getYear() < 80) ) {
-                            s1.discount = 0.2; 
-                        } else if (userFound.isRetired) {
-                            s1.discount = 0.1;
-                        }
-                    }
-                    
+                    foundShoppingCart.items.remove(scif);
                 }
             }
         }
     }
 
-    public void rIU(String user, String nameItem) {
-        User userFound = null;
-        for (User user1 : users) {
-            if (user1.nameOfUser.equals(user)) {
-                userFound = user1;
-            }
-        }
+    public void citemifnotexists(String name, double v) {
+        ItemInfo f = findItem(name);
 
-        if (userFound != null) {
-            ShoppingCart found = findUserShoppingCart(userFound);
-
-            if (found != null) {
-                ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : found.items) {
-                    if (s.item.name == nameItem) {
-                        scif = s;
-                    }
-                }
-
-                if (scif != null) {
-                    found.items.remove(scif);
-                }
-            }
-        }
-    }
-
-    public void citemifnotexists(String arg0, double v) {
-        ItemInfo f = null;
-        for (ItemInfo i : items){
-            if (i.name == arg0) {
-                f = i;
-            }
-        }
-
-        if ( f != null ) {
+        if (f != null) {
 
         } else {
             ItemInfo ift = new ItemInfo();
-            ift.name = arg0;
+            ift.name = name;
             ift.price = v;
             items.add(ift);
         }

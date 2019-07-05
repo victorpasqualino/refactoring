@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.celfocus.training.Saver;
-import com.celfocus.training.Saver.ItemInfo;
-import com.celfocus.training.Saver.ShoppingCart;
-import com.celfocus.training.Saver.User;
+import com.celfocus.training.ItemInfo;
+import com.celfocus.training.ShoppingCart;
+import com.celfocus.training.User;
 import com.celfocus.training.util.Utils;
 
 /**
@@ -130,7 +130,7 @@ public class UserRequesterFrontend {
 
         nameItem = nameItem.toLowerCase().concat("_item");
 
-        saver.aIU(user, nameItem, qt);
+        saver.addItemToShoppingCart(user, nameItem, qt);
     }
 
 }
