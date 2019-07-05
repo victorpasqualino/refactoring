@@ -35,4 +35,43 @@ public class AppTest
     {
         assertTrue( true );
     }
+    public void testSave(){
+        assertTrue( true );
+    }
+    public void testUpdate(){
+        assertTrue( true );
+    }
+    public void testUserExists(){
+        assertTrue( true );
+
+    }
+    public void testFindUsers(){
+        assertTrue( true );
+    }
+    public void testFindItem(){
+        assertTrue( true );
+    }
+    public void testDelete(){
+        assertTrue( true );
+    }
+    public void testFindShoppingCart(){
+        assertTrue( true );
+    }
+    public void testShoppingCartItem(){
+        assertTrue( true );
+    }
+    public void testCanAddToCart(){
+        assertTrue( true );
+    }
+    public void testaddItemToCart(){
+        assertTrue( true );
+    }
+    public void testRemoveItemFromCart(){
+        assertTrue( true );
+    }
+    public void testCreateItem(){
+        assertTrue( true );
+    }
+
+
 }

@@ -24,16 +24,16 @@ public class UserRequesterFrontend {
         if (type.equals("html")) {
             return "<div>"
              + "<h1>User</h1>"
-             + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.bd + "</span>"
-             + "<span>" + user.ifuserisolder + "</span>"
+             + "<span>" + user.name + "</span>"
+             + "<span>" + user.birthDate + "</span>"
+             + "<span>" + user.isAdult + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
-                    + "<name> " + user.nameOfUser + "</name>"
-                    + "<bd>" + user.bd + "</bd>"
-                    + "<older> " + user.ifuserisolder + "</older>";
+                    + "<name> " + user.name + "</name>"
+                    + "<birthDate>" + user.birthDate + "</birthDate>"
+                    + "<older> " + user.isAdult + "</older>";
             } else {
                 //do nothing
                 return "";
@@ -52,13 +52,13 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>ShoppingCart</h1>"
              + "<span> " + shoppingCart.user + "</span>"
-             + "<span> " + shoppingCart.itens + "</span>"
+             + "<span> " + shoppingCart.itemsList + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<user> " + shoppingCart.user + "</user>"
-                    + "<itens> " + shoppingCart.itens + "</itens>";
+                    + "<itemsList> " + shoppingCart.itemsList + "</itemsList>";
             } else {
                 //do nothing
                 return "";
@@ -69,8 +69,8 @@ public class UserRequesterFrontend {
     /**
      * Metodo utilizado para retornar o Item no formato do frontend solicitado
      * @param type tipo do frontend utilizado
-     * @param item item que será renderizado
-     * @return o texto no formato solicitado com as informarções do item
+     * @param item itemInfo que será renderizado
+     * @return o texto no formato solicitado com as informarções do itemInfo
      */
     public String returnFrontendItem(String type, ItemInfo item) {
         if (type.equals("html")) {
@@ -102,11 +102,11 @@ public class UserRequesterFrontend {
         arg0 = arg0.toUpperCase();
 
         Date d = Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy"));
-        if (new Date().getYear() - d.getYear() < 65) {
+        if (new Date().getTime() - d.getTime() < 65) {
             arg2 = "false";
         }
 
-        saver.saveOrUpdateUser(arg0, Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy")), arg2.equals("true") ? true : false);
+        saver.save(arg0, Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy")), arg2.equals("true") ? true : false);
     }
 
     /**
@@ -114,18 +114,18 @@ public class UserRequesterFrontend {
      */
     public void deleteUser(String arg0) {
         Saver saver = new Saver();
-        saver.deleteUserOrNot(arg0);
+        saver.delete(arg0);
     }
 
     /**
-     * Adicionar item ao carrinho
+     * Adicionar itemInfo ao carrinho
      */
     public void aitemShopping(String user, String nameItem, int qt) {
         Saver saver = new Saver();
 
         nameItem = nameItem.toLowerCase().concat("_item");
 
-        saver.aIU(user, nameItem, qt);
+        saver.addItemToCart(user, nameItem, qt);
     }
 
 }
