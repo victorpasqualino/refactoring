@@ -14,8 +14,10 @@ import com.celfocus.training.util.Utils;
 public class FrontendRequest {
 
 	private static final String DATE_FORMAT = "DD/MM/YYYY";
-	private static final String HTML = "html";
-	private static final String XML = "xml";
+
+	enum FormatTypes {
+		XML, HTML
+	}
 
 	private HtmlFrontendRequest htmlFrontendRequest;
 	private XmlFrontendRequest xmlFrontendRequest;
@@ -38,7 +40,7 @@ public class FrontendRequest {
 	 * @throws Exception
 	 */
 	public String getFrontendUser(String type, User user) throws Exception {
-		switch (type) {
+		switch (FormatTypes.valueOf(type)) {
 		case HTML:
 			return htmlFrontendRequest.getFrontendUser(user);
 		case XML:
@@ -59,7 +61,7 @@ public class FrontendRequest {
 	 * @throws Exception
 	 */
 	public String getFrontendShoppingCart(String type, ShoppingCart shoppingCart) throws Exception {
-		switch (type) {
+		switch (FormatTypes.valueOf(type)) {
 		case HTML:
 			return htmlFrontendRequest.getFrontendShoppingCart(shoppingCart);
 		case XML:
@@ -80,7 +82,7 @@ public class FrontendRequest {
 	 * @throws Exception
 	 */
 	public String getFrontendItem(String type, ItemInfo itemInfo) throws Exception {
-		switch (type) {
+		switch (FormatTypes.valueOf(type)) {
 		case HTML:
 			return htmlFrontendRequest.getFrontendItemInfo(itemInfo);
 		case XML:
