@@ -111,18 +111,6 @@ public class Saver {
         }
     }
 
-    private ShoppingCart findShoppingCart(User userFound) {
-        ShoppingCart found = null;
-        if (userFound != null) {
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.getUser().equals(userFound)) {
-                    found = var;
-                }
-            }
-        }
-        return found;
-    }
-
     private ShoppingCartItem findShoppingCartItem(ShoppingCart found, String nameItem) {
         ShoppingCartItem scif = null;
         if (found != null) {
@@ -167,22 +155,21 @@ public class Saver {
 
         }
     }
-
-    public void rIU(String user, String nameItem) {
-        User userFound = null;
-        for (User user1 : users) {
-            if (user1.getNameOfUser().equals(user)) {
-                userFound = user1;
+    private ShoppingCart findShoppingCart(User userFound) {
+        ShoppingCart found = null;
+        for (ShoppingCart var : shoppingCarts) {
+            if (var.getUser() == userFound) {
+                found = var;
             }
         }
+        return found;
+    }
+
+    public void rIU(String user, String nameItem) {
+        User userFound = findUser(user);
 
         if (userFound != null) {
-            ShoppingCart found = null;
-            for (ShoppingCart var : shoppingCarts) {
-                if (var.getUser() == userFound) {
-                    found = var;
-                }
-            }
+            ShoppingCart found = findShoppingCart(userFound);
 
             if (found != null) {
                 ShoppingCartItem scif = null;
