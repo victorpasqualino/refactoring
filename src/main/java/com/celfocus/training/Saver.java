@@ -209,16 +209,14 @@ public class Saver {
         }
     }
 
-    public void citemifnotexists(String name, double v) {
-        ItemInfo f = findItem(name);
+    public void citemifnotexists(String name, double price) {
+        ItemInfo itemInfo = findItem(name);
 
-        if (f != null) {
-
-        } else {
-            ItemInfo ift = new ItemInfo();
-            ift.name = name;
-            ift.price = v;
-            items.add(ift);
+        if (!(itemInfo == null)) {
+            ItemInfo newItemInfo = new ItemInfo();
+            newItemInfo.name = name;
+            newItemInfo.price = price;
+            items.add(newItemInfo);
         }
     }
 
