@@ -23,18 +23,18 @@ import com.celfocus.training.util.exception.RefactorigException;
 
 public final class Utils {
 
-	private final static Logger LOGGER = Logger.getLogger(Utils.class.getName());
-
 	private Utils() {
 	}
 
-	static MessageDigest sha256;
+	private static Logger logger = Logger.getLogger(Utils.class.getName());
+
+	private static MessageDigest sha256;
 
 	static {
 		try {
 			sha256 = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			LOGGER.severe("Error creating SHA-256");
+			logger.severe("Error creating SHA-256");
 		}
 	}
 
@@ -52,18 +52,13 @@ public final class Utils {
 
 	public static Map<String, String> parseHTTPHeaderMap(String headers) {
 		String value = headers.substring(1, headers.length() - 1);
-		String[] keyValuePairs = value.split(","); // split the string to creat key-value pairs
+		String[] keyValuePairs = value.split(",");
 		Map<String, String> map = new HashMap<>();
-
-		for (String pair : keyValuePairs) // iterate over the pairs
-		{
-			String[] entry = pair.split("=", 2); // split the pairs to get key and value
-
+		for (String pair : keyValuePairs) {
+			String[] entry = pair.split("=", 2);
 			if (entry.length > 1) {
-
-				map.put(entry[0].trim(), entry[1].trim()); // add them to the hashmap and trim whitespaces
+				map.put(entry[0].trim(), entry[1].trim());
 			}
-
 		}
 		return map;
 	}
@@ -97,7 +92,7 @@ public final class Utils {
 		if (ts == null) {
 			return new ArrayList<>(0);
 		}
-		java.util.List<T> list = new ArrayList<>(ts.length);
+		List<T> list = new ArrayList<>(ts.length);
 		for (T t : ts) {
 			list.add(t);
 		}
