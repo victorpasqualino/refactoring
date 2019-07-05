@@ -46,9 +46,6 @@ public class Saver {
 		this.user = user;
 	}
 
-	public static List<User> getUserlist() {
-		return userList;
-	}
 
 	/**
 	 * Cria ou atualiza o usuário
