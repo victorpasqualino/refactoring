@@ -16,4 +16,20 @@ public class User {
     public void setNameOfUser(String nameOfUser) {
         this.nameOfUser = nameOfUser;
     }
+
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public boolean isOverEighteen() {
+        return overEighteen;
+    }
+
+    public void setOverEighteen(boolean overEighteen) {
+        this.overEighteen = overEighteen;
+    }
 }

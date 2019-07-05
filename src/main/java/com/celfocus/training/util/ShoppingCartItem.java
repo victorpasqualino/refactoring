@@ -3,13 +3,13 @@ package com.celfocus.training.util;
 import com.celfocus.training.Saver;
 
 public class ShoppingCartItem {
-    private Saver.ItemInfo item;
+    private ItemInfo item;
 
     private int qt;
 
-    priva6e double discount;
+    private double discount;
 
-    public Saver.ItemInfo getItem() {
+    public ItemInfo getItem() {
         return item;
     }
 

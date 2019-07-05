@@ -2,6 +2,7 @@ package com.celfocus.training;
 
 import com.celfocus.training.util.ItemInfo;
 import com.celfocus.training.util.ShoppingCart;
+import com.celfocus.training.util.ShoppingCartItem;
 import com.celfocus.training.util.User;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Saver {
             user.setNameOfUser(name);
             users.add(fillUserInfo(user,birthDay,overEighteen));
             ShoppingCart s = createShoppingCart(user);
-            s.itens = new ArrayList<>();
+            s.setItens(new ArrayList<>());
             shoppingCarts.add(s);
             return user;
         }
@@ -55,22 +56,22 @@ public class Saver {
         return foundCart;
     }
 
-    private User fillUserInfo(User user, Date birthDate,boolean overEighteen){
-        user.birthDay = birthDate;
-        user.overEighteen = overEighteen;
+    private User fillUserInfo(User user, Date birthDate,boolean overeighteen){
+        user.setBirthDay(birthDate);
+        user.setOverEighteen(overeighteen);
         return user;
     }
 
     private ShoppingCart createShoppingCart(User user){
         ShoppingCart sc = new ShoppingCart();
-        sc.user = user;
+        sc.setUser(user);
         return sc;
     }
 
     private boolean existUser(String name) {
         User userFound = null;
         for (User user : users) {
-            if (user.nameOfUser.equals(name)) {
+            if (user.getNameOfUser().equals(name) ) {
                 userFound = user;
             }
         }
@@ -80,7 +81,7 @@ public class Saver {
     private User findUser(String name) {
         User userFound = null;
         for (User user : users) {
-            if (user.nameOfUser.equals(name)) {
+            if (user.getNameOfUser().equals(name)) {
                 userFound = user;
             }
         }
@@ -90,7 +91,7 @@ public class Saver {
     public ItemInfo encontrarItem(String name) {
         ItemInfo itemFound = null;
         for (ItemInfo item : itens) {
-            if (item.name.equals(name)) {
+            if (item.getName().equals(name)) {
                 itemFound = item;
             }
         }
@@ -100,7 +101,7 @@ public class Saver {
     public void deleteUserOrNot(String name) {
         User userFound = null;
         for (User user : users) {
-            if (user.nameOfUser.equals(name)) {
+            if (user.getNameOfUser().equals(name)) {
                 userFound = user;
             }
         }
@@ -113,7 +114,7 @@ public class Saver {
     public void aIU(String user, String nameItem, int qt) {
         User userFound = null;
         for (User user1 : users) {
-            if (user1.nameOfUser.equals(user)) {
+            if (user1.getNameOfUser().equals(user)) {
                 userFound = user1;
             }
         }
@@ -121,37 +122,38 @@ public class Saver {
         if (userFound != null) {
             ShoppingCart found = null;
             for (ShoppingCart var : shoppingCarts) {
-                if (var.user == userFound) {
+                if (var.getUser() == userFound) {
                     found = var;
                 }
             }
 
             if (found != null) {
                 ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : found.itens) {
-                    if (s.item.name == nameItem) {
+                for (ShoppingCartItem s : found.getItens()) {
+                    if (s.getItem().getName() == nameItem) {
                         scif = s;
                     }
                 }
 
                 if (scif != null) {
-                    scif.qt += qt;
+
+                    scif.setQt(scif.getQt()+qt);
                 } else {
                     ItemInfo ifo = null;
                     for (ItemInfo item : itens) {
-                        if (item.name.equals(nameItem)) {
+                        if (item.getName().equals(nameItem)) {
                             ifo = item;
                         }
                     }
 
                     if (ifo != null) {
                         ShoppingCartItem s1 = new ShoppingCartItem();
-                        s1.item = ifo;
-                        s1.qt = qt;
-                        if ( userFound.overEighteen && (new Date().getYear() - userFound.birthDay.getYear() < 80) ) {
-                            s1.discount = 0.2; 
-                        } else if (userFound.overEighteen) {
-                            s1.discount = 0.1;
+                        s1.setItem(ifo);
+                        s1.setQt(qt);
+                        if ( userFound.isOverEighteen() && (new Date().getYear() - userFound.getBirthDay().getYear() < 80) ) {
+                            s1.setDiscount(0.2 );
+                        } else if (userFound.isOverEighteen()) {
+                            s1.setDiscount(0.1);
                         }
                     } else {
 
@@ -165,7 +167,7 @@ public class Saver {
     public void rIU(String user, String nameItem) {
         User userFound = null;
         for (User user1 : users) {
-            if (user1.nameOfUser.equals(user)) {
+            if (user1.getNameOfUser().equals(user)) {
                 userFound = user1;
             }
         }
@@ -173,21 +175,21 @@ public class Saver {
         if (userFound != null) {
             ShoppingCart found = null;
             for (ShoppingCart var : shoppingCarts) {
-                if (var.user == userFound) {
+                if (var.getUser() == userFound) {
                     found = var;
                 }
             }
 
             if (found != null) {
                 ShoppingCartItem scif = null;
-                for (ShoppingCartItem s : found.itens) {
-                    if (s.item.name == nameItem) {
+                for (ShoppingCartItem s : found.getItens()) {
+                    if (s.getItem().getName() == nameItem) {
                         scif = s;
                     }
                 }
 
                 if (scif != null) {
-                    found.itens.remove(scif);
+                    found.getItens().remove(scif);
                 }
             }
         }
@@ -196,7 +198,7 @@ public class Saver {
     public void citemifnotexists(String arg0, double v) {
         ItemInfo f = null;
         for (ItemInfo i : itens){
-            if (i.name == arg0) {
+            if (i.getName() == arg0) {
                 f = i;
             }
         }
@@ -205,8 +207,8 @@ public class Saver {
 
         } else {
             ItemInfo ift = new ItemInfo();
-            ift.name = arg0;
-            ift.valor = v;
+            ift.setName(arg0);
+            ift.setValor(v);
             itens.add(ift);
         }
     }
