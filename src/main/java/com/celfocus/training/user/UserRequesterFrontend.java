@@ -15,8 +15,16 @@ import com.celfocus.training.util.Utils;
 public class UserRequesterFrontend implements IItemRequestFrontend, IShoppingCartRequestFrontend, IUserRequestFrontend {
 
 	enum formatTypes {
-		html, xml
+		HTML, XML
 	}
+
+	private static final String USER_TEMPLATE_HTML = "<div><h1>User</h1><span>%s</span><span>%s</span><span>%s</span></div>";
+	private static final String SHOPPING_CART_TEMPLATE_HTML = "<div><h1>ShoppingCart</h1><span>%s</span><span>%s</span><span>%s</span></div>";
+	private static final String ITEM_INFO_TEMPLATE_HTML = "<div><h1>User</h1><span>%s</span><span>%s</span><span>%s</span></div>";
+
+	private static final String USER_TEMPLATE_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><name> %s</name><bd>%s</bd><older>$s</older>";
+	private static final String SHOPPING_CART_TEMPLATE_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><user>%s</user><itens>%s</itens>";
+	private static final String ITEM_INFO_TEMPLATE_XML = "<name> %s</name><valor> %s</valor>";
 
 	/**
 	 * Metodo utilizado para retornar o Usuario no formato do frontend
@@ -29,12 +37,10 @@ public class UserRequesterFrontend implements IItemRequestFrontend, IShoppingCar
 	 * @return o texto no formato solicitado com as informarções do user
 	 */
 	public String returnFrontendUser(String type, User user) {
-		if (type.equals(formatTypes.html)) {
-			return "<div>" + "<h1>User</h1>" + "<span>" + user.getName() + "</span>" + "<span>" + user.getBirthDate()
-					+ "</span>" + "<span>" + user.isOfAge() + "</span>" + "</div>";
-		} else if (type.equals(formatTypes.xml)) {
-			return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>" + "<name> " + user.getName()
-					+ "</name>" + "<bd>" + user.getBirthDate() + "</bd>" + "<older> " + user.isOfAge() + "</older>";
+		if (type.equals(formatTypes.HTML)) {
+			return String.format(USER_TEMPLATE_HTML, user.getName(), Utils.toString(user.getBirthDate(), "DD/MM/YYYY"));
+		} else if (type.equals(formatTypes.XML)) {
+			return String.format(USER_TEMPLATE_XML, user.getName(), Utils.toString(user.getBirthDate(), "DD/MM/YYYY"));
 		} else {
 			// do nothing
 			return "";
@@ -53,12 +59,11 @@ public class UserRequesterFrontend implements IItemRequestFrontend, IShoppingCar
 	 * @return o texto no formato solicitado com as informarções do shoppingCart
 	 */
 	public String returnFrontendShoppingCart(String type, ShoppingCart shoppingCart) {
-		if (type.equals(formatTypes.html)) {
-			return "<div>" + "<h1>ShoppingCart</h1>" + "<span> " + shoppingCart.getUser() + "</span>" + "<span> "
-					+ shoppingCart.getItens() + "</span>" + "</div>";
-		} else if (type.equals(formatTypes.xml)) {
-			return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>" + "<user> " + shoppingCart.getUser()
-					+ "</user>" + "<itens> " + shoppingCart.getItens() + "</itens>";
+		if (type.equals(formatTypes.HTML)) {
+			return String.format(SHOPPING_CART_TEMPLATE_HTML, shoppingCart.getUser().getName(),
+					shoppingCart.getItems());
+		} else if (type.equals(formatTypes.XML)) {
+			return String.format(SHOPPING_CART_TEMPLATE_XML, shoppingCart.getUser().getName(), shoppingCart.getItems());
 		} else {
 			// do nothing
 			return "";
@@ -76,11 +81,10 @@ public class UserRequesterFrontend implements IItemRequestFrontend, IShoppingCar
 	 * @return o texto no formato solicitado com as informarções do item
 	 */
 	public String returnFrontendItem(String type, ItemInfo item) {
-		if (type.equals(formatTypes.html)) {
-			return "<div>" + "<h1>Item</h1>" + "<span> " + item.getName() + "</span>" + "<span> " + item.getValor()
-					+ "</span>" + "</div>";
-		} else if (type.equals(formatTypes.xml)) {
-			return "<name> " + item.getName() + "</name>" + "<valor> " + item.getValor() + "</valor>";
+		if (type.equals(formatTypes.HTML)) {
+			return String.format(ITEM_INFO_TEMPLATE_HTML, item.getName(), item.getValor());
+		} else if (type.equals(formatTypes.XML)) {
+			return String.format(ITEM_INFO_TEMPLATE_XML, item.getName(), item.getValor());
 		} else {
 			// do nothing
 			return "";
@@ -101,7 +105,7 @@ public class UserRequesterFrontend implements IItemRequestFrontend, IShoppingCar
 		userName = userName.toUpperCase();
 
 		Date dt = Utils.toDate(date, new SimpleDateFormat("dd/mm/yyyy"));
-		if (new Date().getYear() - dt.getYear() < 65) {
+		if (Utils.yearsSinceDate(dt) < 65) {
 			isOfAge = "false";
 		}
 

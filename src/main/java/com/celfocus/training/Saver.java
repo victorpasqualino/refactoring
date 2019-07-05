@@ -8,6 +8,7 @@ import com.celfocus.domain.ItemInfo;
 import com.celfocus.domain.ShoppingCart;
 import com.celfocus.domain.ShoppingCartItem;
 import com.celfocus.domain.User;
+import com.celfocus.training.util.Utils;
 
 /**
  * Temos 4 entidades em nosso projeto User, ShoppingCart, ShoppingCartItem e
@@ -26,37 +27,29 @@ public class Saver {
 	}
 
 	private User updateUser(User user, Date birthDate, boolean isOfAge) {
-		user.setBirthDate(birthDate);
-		user.setOfAge(isOfAge);
-		ShoppingCart shoppingCart = findUsersShoppingCart(user);
-		if (shoppingCart != null) {
-			// do nothing
-		} else {
-			ShoppingCart s = new ShoppingCart();
-			s.setUser(user);
-			shoppingCarts.add(s);
+		User toUpdate = findUser(user.getName());
+		toUpdate.setBirthDate(birthDate);
+		toUpdate.setOfAge(isOfAge);
+
+		ShoppingCart shoppingCart = findUsersShoppingCart(user.getName());
+		if (shoppingCart == null) {
+			ShoppingCart cart = new ShoppingCart(user, new ArrayList<>());
+			shoppingCarts.add(cart);
 		}
-		users.add(user);
+
 		return user;
 	}
 
 	private User saveUser(String name, Date birthDate, boolean isOfAge) {
 		User user = new User(name, birthDate, isOfAge);
 		users.add(user);
-		ShoppingCart s = new ShoppingCart();
-		s.setUser(user);
-		s.setItens(new ArrayList<>());
-		shoppingCarts.add(s);
+		shoppingCarts.add(new ShoppingCart(user, new ArrayList<>()));
 		return user;
 	}
 
 	public User upsertUser(String userName, Date birthDate, boolean isOfAge) {
 		User user = findUser(userName);
-		if (user != null) {
-			return updateUser(user, birthDate, isOfAge);
-		} else {
-			return saveUser(userName, birthDate, isOfAge);
-		}
+		return user != null ? updateUser(user, birthDate, isOfAge) : saveUser(userName, birthDate, isOfAge);
 	}
 
 	private User findUser(String name) {
@@ -84,9 +77,9 @@ public class Saver {
 		}
 	}
 
-	private ShoppingCart findUsersShoppingCart(User user) {
+	private ShoppingCart findUsersShoppingCart(String userName) {
 		for (ShoppingCart shoppingCart : shoppingCarts) {
-			if (shoppingCart.getUser() == user) {
+			if (userName.equals(shoppingCart.getUser().getName())) {
 				return shoppingCart;
 			}
 		}
@@ -94,8 +87,8 @@ public class Saver {
 	}
 
 	private ShoppingCartItem findShoppingCartItem(ShoppingCart shoppingCart, String itemName) {
-		for (ShoppingCartItem shoppingCartItem : shoppingCart.getItens()) {
-			if (shoppingCartItem.getItem().getName() == itemName) {
+		for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
+			if (shoppingCartItem.getItem().getName().equals(itemName)) {
 				return shoppingCartItem;
 			}
 		}
@@ -105,60 +98,48 @@ public class Saver {
 	public void addItemToShoppingCart(String name, String itemName, int quantity) {
 		User user = findUser(name);
 		if (user == null) {
-			// Logger user not found
 			return;
 		}
 
-		ShoppingCart shoppingCart = findUsersShoppingCart(user);
-
+		ShoppingCart shoppingCart = findUsersShoppingCart(user.getName());
 		if (shoppingCart == null) {
-			// Logger users ShoppingCart not found
 			return;
 		}
 
 		ShoppingCartItem shoppingCartItem = findShoppingCartItem(shoppingCart, itemName);
-
 		if (shoppingCartItem != null) {
 			shoppingCartItem.setQuantity(shoppingCartItem.getQuantity() + quantity);
 		} else {
 			ItemInfo ifo = findItem(itemName);
 			if (ifo == null) {
-				// Logger item name does not exist in Items list
 				return;
 			}
-			createShoppingCartItem(ifo, quantity, user);
+			shoppingCart.getItems().add(new ShoppingCartItem(ifo, quantity, calculateDiscount(user)));
 		}
 	}
 
-	private void createShoppingCartItem(ItemInfo ifo, int quantity, User user) {
-		ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-		shoppingCartItem.setItem(ifo);
-		shoppingCartItem.setQuantity(quantity);
-		if (user.isOfAge() == true && (new Date().getYear() - user.getBirthDate().getYear() < 80)) {
-			shoppingCartItem.setDiscount(0.2);
-		} else if (user.isOfAge() == true) {
-			shoppingCartItem.setDiscount(0.1);
-		}
+	private double calculateDiscount(User user) {
+		return user.isOfAge() ? calculateSeniorDiscount(user) : 0.0;
+	}
 
+	private double calculateSeniorDiscount(User user) {
+		return Utils.yearsSinceDate(user.getBirthDate()) < 80 ? 0.2 : 0.1;
 	}
 
 	public void removeUsersItem(String userName, String nameItem) {
 		User user = findUser(userName);
-
 		if (user == null) {
-			// Logger user not found
 			return;
 		}
-		ShoppingCart usersShoppingCart = findUsersShoppingCart(user);
 
+		ShoppingCart usersShoppingCart = findUsersShoppingCart(user.getName());
 		if (usersShoppingCart == null) {
-			// Logger user does not have a ShoppingCart
 			return;
 		}
 		ShoppingCartItem shoppingCartItem = findShoppingCartItem(usersShoppingCart, nameItem);
 
 		if (shoppingCartItem != null) {
-			usersShoppingCart.getItens().remove(shoppingCartItem);
+			usersShoppingCart.getItems().remove(shoppingCartItem);
 		}
 
 	}
