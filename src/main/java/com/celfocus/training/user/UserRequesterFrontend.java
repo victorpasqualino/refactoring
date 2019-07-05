@@ -1,13 +1,13 @@
 package com.celfocus.training.user;
 
+import com.celfocus.training.Saver;
+import com.celfocus.training.util.ItemInfo;
+import com.celfocus.training.util.ShoppingCart;
+import com.celfocus.training.util.User;
+import com.celfocus.training.util.Utils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.celfocus.training.Saver;
-import com.celfocus.training.Saver.ItemInfo;
-import com.celfocus.training.Saver.ShoppingCart;
-import com.celfocus.training.Saver.User;
-import com.celfocus.training.util.Utils;
 
 /**
  * User For Frontent
@@ -31,16 +31,16 @@ public class UserRequesterFrontend {
         if (type.equals("html")) {
             return DIV
              + H1 + "User" + CH1
-             + SPAN + user.nameOfUser + CSPAN
-             + SPAN + user.bd + CSPAN
-             + SPAN + user.ifuserisolder + CSPAN
+             + SPAN + user.getNameOfUser() + CSPAN
+             + SPAN + user.getBirthDay() + CSPAN
+             + SPAN + user.isOverEighteen() + CSPAN
              + CDIV;
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
-                    + "<name> " + user.nameOfUser + "</name>"
-                    + "<bd>" + user.bd + "</bd>"
-                    + "<older> " + user.ifuserisolder + "</older>";
+                    + "<name> " + user.getNameOfUser() + "</name>"
+                    + "<bd>" + user.getBirthDay() + "</bd>"
+                    + "<older> " + user.isOverEighteen() + "</older>";
             } else {
                 //do nothing
                 return "";
@@ -58,14 +58,14 @@ public class UserRequesterFrontend {
         if (type.equals("html")) {
             return DIV
              + H1 + "ShoppingCart" + CH1
-             + SPAN + shoppingCart.user + CSPAN
-             + SPAN + shoppingCart.itens + CSPAN
+             + SPAN + shoppingCart.getUser() + CSPAN
+             + SPAN + shoppingCart.getItens() + CSPAN
              + CDIV;
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
-                    + "<user> " + shoppingCart.user + "</user>"
-                    + "<itens> " + shoppingCart.itens + "</itens>";
+                    + "<user> " + shoppingCart.getUser() + "</user>"
+                    + "<itens> " + shoppingCart.getItens() + "</itens>";
             } else {
                 //do nothing
                 return "";
@@ -83,13 +83,13 @@ public class UserRequesterFrontend {
         if (type.equals("html")) {
             return DIV
              + H1 + "Item" + CH1
-             + SPAN + item.name + CSPAN
-             + SPAN + item.valor + CSPAN
+             + SPAN + item.getName() + CSPAN
+             + SPAN + item.getValor() + CSPAN
              + CDIV;
         } else {
             if (type.equals("xml")) {
-                return "<name> " + item.name + "</name>"
-                    + "<valor> " + item.valor + "</valor>";
+                return "<name> " + item.getName() + "</name>"
+                    + "<valor> " + item.getValor() + "</valor>";
             } else {
                 //do nothing
                 return "";

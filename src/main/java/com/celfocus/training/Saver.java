@@ -1,5 +1,9 @@
 package com.celfocus.training;
 
+import com.celfocus.training.util.ItemInfo;
+import com.celfocus.training.util.ShoppingCart;
+import com.celfocus.training.util.User;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,40 +17,6 @@ public class Saver {
     private static final List<ShoppingCart> shoppingCarts = new ArrayList<>();
     private static final List<ItemInfo> itens = new ArrayList<>();
 
-    public static class User {
-
-        
-        public String nameOfUser; // nome
-
-        public Date birthDay; // data de nascimento
-
-        public boolean overEighteen; // se usuário é maior de idade
-
-    }
-
-    public static class ShoppingCart {
-        
-        public User user;
-
-        public List<ShoppingCartItem> itens;
-    }
-
-    public static class ShoppingCartItem {
-
-        public ItemInfo item;
-
-        public int qt;
-
-        public double discount;
-
-    }
-
-    public static class ItemInfo {
-
-        public String name;
-
-        public double valor;
-    }
 
     public User saveOrUpdateUser(String name, Date birthDay, boolean overEighteen) {
         if (existUser(name)) {
@@ -66,7 +36,7 @@ public class Saver {
         } else {
             //saveUser(name);
             User user = new User();
-            user.nameOfUser = name;
+            user.setNameOfUser(name);
             users.add(fillUserInfo(user,birthDay,overEighteen));
             ShoppingCart s = createShoppingCart(user);
             s.itens = new ArrayList<>();
@@ -78,7 +48,7 @@ public class Saver {
     private ShoppingCart userHasShoppingCart(User user){
         ShoppingCart foundCart = null;
         for (ShoppingCart cart : shoppingCarts) {
-            if (cart.user == user) {
+            if (cart.getUser() == user) {
                 foundCart = cart;
             }
         }
