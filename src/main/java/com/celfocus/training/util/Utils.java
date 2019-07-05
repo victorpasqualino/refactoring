@@ -21,7 +21,7 @@ import org.apache.commons.codec.binary.Hex;
 public final class Utils {
 
 	private Utils() {
-	};
+	}
 
 	static MessageDigest SHA256;
 
@@ -69,7 +69,7 @@ public final class Utils {
 		try {
 			return format.parse(date);
 		} catch (ParseException ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("Error parsing Date" + date + " in the format" + format, ex);
 		}
 	}
 
@@ -109,7 +109,7 @@ public final class Utils {
 			throw new IllegalArgumentException("Length should be pair");
 		}
 		int length = ts.length / 2;
-		Map<K, V> map = new HashMap<K, V>(length);
+		Map<K, V> map = new HashMap<>(length);
 		for (int index = 0; index <= length; index += 2) {
 			map.put((K) ts[index], (V) ts[index + 1]);
 		}

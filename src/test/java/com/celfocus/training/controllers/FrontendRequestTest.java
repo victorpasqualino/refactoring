@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.celfocus.training.domain.iteminfo.ItemInfo;
 import com.celfocus.training.domain.shoppingcart.ShoppingCart;
 import com.celfocus.training.domain.user.User;
+import com.celfocus.training.util.Utils;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -38,20 +39,41 @@ public class FrontendRequestTest extends TestCase {
 	 */
 	public void testApp() throws Exception {
 
+		// Test User create
 		User user = request.upsertUser("user01", "03/04/1992");
 		assertNotNull(user);
 
-		user = request.upsertUser("user01", "06/14/1992");
+		// Test User update
+		user = request.upsertUser(user.getName(), "06/14/1992");
 		assertNotNull(user);
-		// assertTrue(!user.getBirthDate().equals(user2.getBirthDate()));
+		assertTrue(!Utils.toString(user.getBirthDate(), "DD/MM/YYYY").equals("03/04/1992"));
 
-		request.addItemToShoppingCart("user01", "item1", 1);
-		request.addItemToShoppingCart("user01", "item2", 2);
+		request.addItemToShoppingCart(user.getName(), "item1", 1);
+		request.addItemToShoppingCart(user.getName(), "item2", 2);
 
-		User user2 = request.upsertUser("user02", "02/06/1992");
+		// Test add new user
+		User user2 = request.upsertUser("user02", "01/01/1955");
 		assertNotNull(user2);
 
-		request.addItemToShoppingCart("user02", "item3", 3);
+		// Test create and delete item
+		String item03 = "item03";
+		request.createItemInfo(item03, 10.0);
+		request.createItemInfo("item04", 20.0);
+
+		request.addItemToShoppingCart(user2.getName(), item03, 3);
+		request.addItemToShoppingCart(user2.getName(), item03, 2);
+
+		request.removeItemFromUser(user2.getName(), item03);
+
+		// Test delete
+		request.deleteUser(user.getName());
+		request.deleteUser(user2.getName());
+
+		// Test older user
+		User user4 = request.upsertUser("user04", "05/03/1940");
+		assertNotNull(user4);
+
+		request.addItemToShoppingCart(user4.getName(), "item04", 2);
 
 		try {
 			request.addItemToShoppingCart("user03", "item3", 3);
@@ -59,7 +81,6 @@ public class FrontendRequestTest extends TestCase {
 		} catch (NullPointerException e) {
 			assertTrue(true);
 		}
-		user = request.upsertUser("user01", "03/04/1992");
 
 		String htmlUser = request.getFrontendUser("html", user);
 		assertNotNull(htmlUser);
@@ -69,11 +90,26 @@ public class FrontendRequestTest extends TestCase {
 		assertNotNull(xmlUser);
 		assertTrue(xmlUser.contains(user.getName()));
 
-		String htmlCart = request.getFrontendShoppingCart("html", new ShoppingCart(user, new ArrayList<>()));
-		String xmlCart = request.getFrontendShoppingCart("xml", new ShoppingCart(user, new ArrayList<>()));
+		ShoppingCart dummyCart = new ShoppingCart(user, new ArrayList<>());
 
-		String htmlItem = request.getFrontendItem("html", new ItemInfo("item02", 2.0));
-		String xmlItem = request.getFrontendItem("xml", new ItemInfo("item03", 3.0));
+		String htmlCart = request.getFrontendShoppingCart("html", dummyCart);
+		assertNotNull(htmlCart);
+		String xmlCart = request.getFrontendShoppingCart("xml", dummyCart);
+		assertNotNull(xmlCart);
+
+		ItemInfo dummyInfo = new ItemInfo("dummyInfo", 10.0);
+
+		String htmlItem = request.getFrontendItem("html", dummyInfo);
+		assertNotNull(htmlItem);
+		String xmlItem = request.getFrontendItem("xml", dummyInfo);
+		assertNotNull(xmlItem);
+
+		String emptyUser = request.getFrontendUser("something", user);
+		assertTrue("".equals(emptyUser));
+		String emptyShoppingCart = request.getFrontendShoppingCart("something", dummyCart);
+		assertTrue("".equals(emptyShoppingCart));
+		String emptyItem = request.getFrontendItem("something", dummyInfo);
+		assertTrue("".equals(emptyItem));
 
 	}
 }

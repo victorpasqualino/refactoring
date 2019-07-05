@@ -24,15 +24,11 @@ public class AppService {
 	private ShoppingCartDao shoppingCartService = new ShoppingCartDao();
 	private ItemInfoDao itemService = new ItemInfoDao();
 
-	public User upsertUser(String name, Date birthDate) throws Exception {
-		if (userService.userExists(name)) {
-			return updateUser(name, birthDate);
-		} else {
-			return createUser(name, birthDate);
-		}
+	public User upsertUser(String name, Date birthDate) {
+		return userService.userExists(name) ? updateUser(name, birthDate) : createUser(name, birthDate);
 	}
 
-	private User updateUser(String userName, Date birthDate) throws Exception {
+	private User updateUser(String userName, Date birthDate) {
 		User user = userService.update(new User(userName, birthDate, isSenior(birthDate)));
 		if (!shoppingCartService.existsShoppingCart(userName)) {
 			shoppingCartService.create(new ShoppingCart(user, new ArrayList<>()));
@@ -40,14 +36,15 @@ public class AppService {
 		return user;
 	}
 
-	private User createUser(String name, Date birthDate) throws Exception {
+	private User createUser(String name, Date birthDate) {
 		User user = userService.create(new User(name, birthDate, isSenior(birthDate)));
 		shoppingCartService.create(new ShoppingCart(user, new ArrayList<>()));
 		return user;
 	}
 
-	public void deleteUser(String name) throws Exception {
+	public void deleteUser(String name) {
 		userService.delete(name);
+		shoppingCartService.delete(name);
 	}
 
 	public void addItemToUserShoppingCart(String userName, String itemName, int quantity) {
@@ -71,21 +68,24 @@ public class AppService {
 		}
 	}
 
-	private Double calculateDiscount(User user) {
-		return user.isSenior() ? Utils.yearsSinceDate(user.getBirthDate()) < 80 ? 0.2 : 0.1 : 0.0;
+	private double calculateDiscount(User user) {
+		return user.isSenior() ? calculateSeniorDiscount(user) : 0.0;
+	}
+
+	private double calculateSeniorDiscount(User user) {
+		return Utils.yearsSinceDate(user.getBirthDate()) < 80 ? 0.2 : 0.1;
 	}
 
 	public void removeItemFromUser(String userName, String itemName) {
-
 		User user = userService.findUserByName(userName);
 		Objects.requireNonNull(user);
-
 		ShoppingCart shoppingCart = shoppingCartService.findByUserName(userName);
 		Objects.requireNonNull(shoppingCart);
 
 		for (ShoppingCartItem item : shoppingCart.getItems()) {
 			if (itemName.equals(item.getInfo().getName())) {
 				shoppingCart.getItems().remove(item);
+				itemService.delete(itemName);
 				break;
 			}
 		}

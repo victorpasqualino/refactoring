@@ -14,6 +14,8 @@ import com.celfocus.training.util.Utils;
 public class FrontendRequest {
 
 	private static final String DATE_FORMAT = "DD/MM/YYYY";
+	private static final String HTML = "html";
+	private static final String XML = "xml";
 
 	private HtmlFrontendRequest htmlFrontendRequest;
 	private XmlFrontendRequest xmlFrontendRequest;
@@ -37,9 +39,9 @@ public class FrontendRequest {
 	 */
 	public String getFrontendUser(String type, User user) throws Exception {
 		switch (type) {
-		case "html":
+		case HTML:
 			return htmlFrontendRequest.getFrontendUser(user);
-		case "xml":
+		case XML:
 			return xmlFrontendRequest.getFrontendUser(user);
 		default:
 			return "";
@@ -58,9 +60,9 @@ public class FrontendRequest {
 	 */
 	public String getFrontendShoppingCart(String type, ShoppingCart shoppingCart) throws Exception {
 		switch (type) {
-		case "html":
+		case HTML:
 			return htmlFrontendRequest.getFrontendShoppingCart(shoppingCart);
-		case "xml":
+		case XML:
 			return xmlFrontendRequest.getFrontendShoppingCart(shoppingCart);
 		default:
 			return "";
@@ -79,9 +81,9 @@ public class FrontendRequest {
 	 */
 	public String getFrontendItem(String type, ItemInfo itemInfo) throws Exception {
 		switch (type) {
-		case "html":
+		case HTML:
 			return htmlFrontendRequest.getFrontendItemInfo(itemInfo);
-		case "xml":
+		case XML:
 			return xmlFrontendRequest.getFrontendItemInfo(itemInfo);
 		default:
 			return "";
@@ -129,6 +131,14 @@ public class FrontendRequest {
 		Objects.requireNonNull(userName);
 		Objects.requireNonNull(itemName);
 		appService.addItemToUserShoppingCart(userName, Utils.convertItemName(itemName), quantity);
+	}
+
+	public void createItemInfo(String itemName, double value) {
+		appService.createItemInfo(Utils.convertItemName(itemName), value);
+	}
+
+	public void removeItemFromUser(String userName, String itemName) {
+		appService.removeItemFromUser(userName, itemName);
 	}
 
 }
