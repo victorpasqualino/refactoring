@@ -8,6 +8,7 @@ import com.celfocus.training.domain.frontend.user.UserFrontendRequest;
 import com.celfocus.training.domain.iteminfo.ItemInfo;
 import com.celfocus.training.domain.shoppingcart.ShoppingCart;
 import com.celfocus.training.domain.user.User;
+import com.celfocus.training.util.Utils;
 
 public class XmlFrontendRequest implements UserFrontendRequest, ShoppingCartFrontendRequest, ItemInfoFrontendRequest {
 
@@ -16,8 +17,9 @@ public class XmlFrontendRequest implements UserFrontendRequest, ShoppingCartFron
 	@Override
 	public String getFrontendUser(User user) throws Exception {
 		Objects.requireNonNull(user);
-		return XML_HEADER + "<name> " + user.getName() + "</name>" + "<bd>" + user.getBirthDate() + "</bd>" + "<older> "
-				+ user.isSenior() + "</older>";
+		return XML_HEADER + "<name> " + user.getName() + "</name>" + "<bd>"
+				+ Utils.toString(user.getBirthDate(), DATE_FORMAT) + "</bd>" + "<older> " + user.isSenior()
+				+ "</older>";
 	}
 
 	@Override

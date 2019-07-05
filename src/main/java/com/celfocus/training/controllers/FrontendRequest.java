@@ -13,7 +13,7 @@ import com.celfocus.training.util.Utils;
 
 public class FrontendRequest {
 
-	private static final String DATE_FORMAT = "dd/mm/yyyy";
+	private static final String DATE_FORMAT = "DD/MM/YYYY";
 
 	private HtmlFrontendRequest htmlFrontendRequest;
 	private XmlFrontendRequest xmlFrontendRequest;
@@ -97,9 +97,9 @@ public class FrontendRequest {
 	 *            Mandatory - The user birth date, in String format.
 	 * @throws Exception
 	 */
-	public void upsertUser(String name, String birthDate) throws Exception {
+	public User upsertUser(String name, String birthDate) throws Exception {
 		Objects.requireNonNull(name);
-		appService.upsertUser(name, Utils.toDate(birthDate, new SimpleDateFormat(DATE_FORMAT)));
+		return appService.upsertUser(name, Utils.toDate(birthDate, new SimpleDateFormat(DATE_FORMAT)));
 	}
 
 	/**
