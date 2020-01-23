@@ -3,10 +3,11 @@ package com.celfocus.training.user;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.celfocus.training.Saver;
-import com.celfocus.training.Saver.ItemInfo;
-import com.celfocus.training.Saver.ShoppingCart;
-import com.celfocus.training.Saver.User;
+import com.celfocus.training.controllers.ShoppingCartController;
+import com.celfocus.training.controllers.UserController;
+import com.celfocus.training.entity.ItemInfo;
+import com.celfocus.training.entity.ShoppingCart;
+import com.celfocus.training.entity.User;
 import com.celfocus.training.util.Utils;
 
 /**
@@ -24,16 +25,16 @@ public class UserRequesterFrontend {
         if (type.equals("html")) {
             return "<div>"
              + "<h1>User</h1>"
-             + "<span>" + user.nameOfUser + "</span>"
-             + "<span>" + user.bd + "</span>"
-             + "<span>" + user.ifuserisolder + "</span>"
+             + "<span>" + user.userName + "</span>"
+             + "<span>" + user.birthDay + "</span>"
+             + "<span>" + user.isAdult + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
-                    + "<name> " + user.nameOfUser + "</name>"
-                    + "<bd>" + user.bd + "</bd>"
-                    + "<older> " + user.ifuserisolder + "</older>";
+                    + "<name> " + user.userName + "</name>"
+                    + "<bd>" + user.birthDay + "</bd>"
+                    + "<older> " + user.isAdult + "</older>";
             } else {
                 //do nothing
                 return "";
@@ -52,13 +53,13 @@ public class UserRequesterFrontend {
             return "<div>"
              + "<h1>ShoppingCart</h1>"
              + "<span> " + shoppingCart.user + "</span>"
-             + "<span> " + shoppingCart.itens + "</span>"
+             + "<span> " + shoppingCart.shoppingCartItems + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
                 return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>"
                     + "<user> " + shoppingCart.user + "</user>"
-                    + "<itens> " + shoppingCart.itens + "</itens>";
+                    + "<itens> " + shoppingCart.shoppingCartItems + "</itens>";
             } else {
                 //do nothing
                 return "";
@@ -76,13 +77,12 @@ public class UserRequesterFrontend {
         if (type.equals("html")) {
             return "<div>"
              + "<h1>Item</h1>"
-             + "<span> " + item.name + "</span>"
-             + "<span> " + item.valor + "</span>"
+             + "<span> " + item.itemName + "</span>"
+             + "<span> " + item.value + "</span>"
              + "</div>";
         } else {
             if (type.equals("xml")) {
-                return "<name> " + item.name + "</name>"
-                    + "<valor> " + item.valor + "</valor>";
+                return "<name> " + item.itemName + "</name>" + "<valor> " + item.value + "</valor>";
             } else {
                 //do nothing
                 return "";
@@ -92,40 +92,38 @@ public class UserRequesterFrontend {
 
     /**
      * Cria ou atualiza usuario
-     * @param arg0
-     * @param arg1
-     * @param arg2
+     * @param userName
+     * @param unformattedDate
+     * @param isAdultString
      */
-    public void createOrUpdateUser(String arg0, String arg1, String arg2) {
-        Saver saver = new Saver();
+    public void createOrUpdateUser(String userName, String unformattedDate, String isAdultString) {
+        UserController userController = new UserController();
 
-        arg0 = arg0.toUpperCase();
+        userName = userName.toUpperCase();
 
-        Date d = Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy"));
-        if (new Date().getYear() - d.getYear() < 65) {
-            arg2 = "false";
+        Date date = Utils.toDate(unformattedDate, new SimpleDateFormat("dd/mm/yyyy"));
+        if (new Date().getYear() - date.getYear() < 65) {
+            isAdultString = "false";
         }
 
-        saver.saveOrUpdateUser(arg0, Utils.toDate(arg1, new SimpleDateFormat("dd/mm/yyyy")), arg2.equals("true") ? true : false);
+        userController.createOrUpdateUser(userName, date, Boolean.getBoolean(isAdultString));
     }
 
     /**
      * Remover Usuario
      */
-    public void deleteUser(String arg0) {
-        Saver saver = new Saver();
-        saver.deleteUserOrNot(arg0);
+    public void deleteUser(String userName) {
+        UserController userController = new UserController();
+        userController.deleteUser(userName);
     }
 
     /**
      * Adicionar item ao carrinho
      */
-    public void aitemShopping(String user, String nameItem, int qt) {
-        Saver saver = new Saver();
-
-        nameItem = nameItem.toLowerCase().concat("_item");
-
-        saver.aIU(user, nameItem, qt);
+    public void addItemToShoppingCart(String userName, String itemName, int quantity) {
+        ShoppingCartController shoppingCartController = new ShoppingCartController();
+        itemName = itemName.toLowerCase().concat("_item");
+        shoppingCartController.saveItemToShoppingCart(userName, itemName, quantity);
     }
 
 }

@@ -1,38 +1,43 @@
 package com.celfocus.training;
 
+import com.celfocus.training.entity.User;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
+import java.util.Calendar;
+import java.util.Date;
+
+public class AppTest extends TestCase {
+
     public AppTest( String testName )
     {
         super( testName );
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
     public static Test suite()
     {
         return new TestSuite( AppTest.class );
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    public void testUserIsOld() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(1940, Calendar.JANUARY, 1);
+        Date date = new Date();
+        date.setTime(cal.getTimeInMillis());
+        User user = new User();
+        user.birthDay = date;
+        assertTrue( user.getUserAge() >= 80 );
     }
+
+    public void testUserIsNotOld() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(1940, Calendar.DECEMBER, 1);
+        Date date = new Date();
+        date.setTime(cal.getTimeInMillis());
+        User user = new User();
+        user.birthDay = date;
+        assertTrue( user.getUserAge() < 80 );
+    }
+
 }

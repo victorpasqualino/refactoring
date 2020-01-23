@@ -1,17 +1,14 @@
 package com.celfocus.training.util;
 
+import com.celfocus.training.entity.User;
+
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import org.apache.commons.codec.binary.Hex;
 
@@ -43,18 +40,14 @@ public final class Utils {
     
     public static Map<String, String> parseHTTPHeaderMap(String headers) {
         String value = headers.substring(1, headers.length() - 1);
-        String[] keyValuePairs = value.split(",");              //split the string to creat key-value pairs
+        String[] keyValuePairs = value.split(",");                    //split the string to creat key-value pairs
         Map<String, String> map = new HashMap<>();
 
-        for (String pair : keyValuePairs)                        //iterate over the pairs
-        {
-            String[] entry = pair.split("=", 2);                   //split the pairs to get key and value
-
+        for (String pair : keyValuePairs) {                                 //iterate over the pairs
+            String[] entry = pair.split("=", 2);                //split the pairs to get key and value
             if (entry.length > 1) {
-
-                map.put(entry[0].trim(), entry[1].trim());          //add them to the hashmap and trim whitespaces
+                map.put(entry[0].trim(), entry[1].trim());                  //add them to the hashmap and trim whitespaces
             }
-
         }
         return map;
     }
@@ -111,6 +104,5 @@ public final class Utils {
         }
         return map;
     }
-
 
 }
